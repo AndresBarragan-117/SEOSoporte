@@ -1,0 +1,402 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+@font-face {
+    font-family: 'OpenSans-Regular';
+    /*Apache License Version 2.0*/
+    src: url('./Fonts/OpenSans-Regular.eot');
+    src: url('./Fonts/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('./Fonts/OpenSans-Regular.ttf') format('truetype'), url('./Fonts/OpenSans-Regular.svg') format('svg');
+}
+
+html, body {
+    height: 100%!important;
+}
+
+#map_canvas {
+    border: 1px solid #bcbcbc;
+    border-radius: 5px;
+    height: 94%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#contenedorVentanas {
+    display: inline-block;
+    margin-top: 6px;
+    width: 100%;
+}
+
+.convencionesMercaderista {
+    float: right;
+    position: relative!important;
+    top: 0!important;
+    left: 0!important;
+}
+
+#convenciones {
+    background-color: transparent;
+    bottom: 70px;
+    color: #444;
+    font-size: 13px;
+    left: 46px;
+    position: fixed;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    width: 198px;
+}
+
+    #convenciones h3 {
+        background-color: #f45e5e;
+        border-bottom: none!important;
+        display: block!important;
+        color: #fff;
+        cursor: pointer;
+        font-family: 'OpenSans-Regular';
+        font-weight: normal;
+        font-size: 13px;
+        margin: 0 auto;
+        padding: 5px 0;
+        text-align: center;
+    }
+
+    #convenciones ul li {
+        font-family: 'OpenSans-Regular';
+        height: 24px;
+        list-style: none;
+        padding: 3px 6px;
+    }
+
+        #convenciones ul li p {
+            background-color: transparent;
+            float: none;
+            margin: -20px 20px;
+        }
+
+        #convenciones ul li img {
+            float: none;
+            height: auto;
+            margin: 0!important;
+            padding-right: 10px;
+            position: relative!important;
+            vertical-align: middle;
+            width: 22px;
+        }
+
+        #convenciones ul li input[type="checkbox"] {
+            float: none;
+            margin: 4px 0 0 170px;
+        }
+
+    #convenciones .ocultarMostrarConvencionesMercaderista, #convenciones .ocultarMostrarConvenciones {
+        background-color: #f2f2f2;
+        border-style: solid;
+        border-width: 0px 1px 1px 1px;
+        border-color: #c6c6c6;
+        border-radius: 0 0 5px 5px;
+    }
+
+.convencionesVentas {
+    float: right;
+    position: relative!important;
+    top: 0!important;
+    left: 0!important;
+}
+
+.convencionesInsumo {
+    float: right;
+    position: relative!important;
+    top: 0!important;
+    left: 0!important;
+}
+
+    .convencionesInsumo h3 {
+        background-color: #1B8C23!important;
+    }
+
+.convencionesMercaderista h3 {
+    background-color: #4285F4!important;
+}
+
+/*.margenBottom {
+    margin-bottom: 12px!important;
+}*/
+
+#reporte input[type="button"] {
+    background-color: #f45e5e;
+    border-bottom: 3px solid #d74141;
+    border-top: 2px solid #f45e5e;
+    color: #fff;
+    cursor: pointer;
+    font-family: "OpenSans-Regular";
+    font-size: 15px;
+    left: 12px;
+    padding: 1px 0;
+    position: fixed;
+    text-align: center;
+    top: 191px;
+    width: 214px;
+}
+
+    #reporte input[type="button"]:hover {
+        background-color: #ff6a6a;
+    }
+
+    #reporte input[type="button"]:focus {
+        border-bottom: 3px solid #f45e5e;
+        border-top: 2px solid #d74141;
+    }
+
+.VentanaInfo {
+    font-family: Tahoma;
+    max-width: 270px;
+    width: 270px;
+}
+
+    .VentanaInfo img {
+        margin: -7px 13px;
+    }
+
+.paddingInfoWindows {
+    padding: 8px 0 0 12px;
+}
+
+.Ventana-Titulo, .Ventana-Titulo-ExtraRuta {
+    background-color: #0588e4;
+    border-radius: 0 0 6px 6px;
+    border-color: #0061bd;
+    border-style: solid;
+    border-width: 0 1px 1px 1px;
+    
+    color: #fff;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0px 0px 0 26px;
+    padding: 5px 7px;
+    text-align: center;
+}
+
+.Ventana-Titulo-ExtraRuta {
+    background-color: #DD0971;
+}
+
+.Ventana-Titulo, .Ventana-Titulo-ClienteSugerido {
+    background-color: #0588e4;
+    border-radius:0 0 6px 6px;
+    border-color:#0061bd;
+    border-style:solid;
+    border-width:0 1px 1px 1px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0px 0px 0 26px;
+    padding:5px 7px;
+    text-align:center;
+}
+
+.Ventana-Titulo-ClienteSugerido {
+    background-color: #4800ff;
+}
+
+
+
+.Ventana-Titulo-CE {
+    background-color: #ff0000;
+    border-radius: 0 0 6px 6px;
+    border-color: #000000;
+    border-style: solid;
+    border-width: 0 1px 1px 1px;
+    
+    color: #fff;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0px 0px 0 26px;
+    padding: 5px 7px;
+    text-align: center;
+}
+
+
+
+.gm-style-iw {
+    background-color: #fff;
+    border-style: solid;
+    border-width: 1px 0px 0px 1px;
+    border-color: #777777;
+    left: 0 !important;
+    top: 0 !important;
+    width: 320px !important;
+}
+
+.Ventana-Contenido {
+    font-size: 13px;
+    line-height: 17px;
+    font-weight: 400;
+    margin-right: 1px;
+    padding: 10px 0 4px 18px;
+    max-height: 140px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    .Ventana-Contenido b {
+        font-weight: bold;
+    }
+
+#regillaCliente, #regillaClienteInsumos, #regillaMercaderista {
+    background-color: #fff;
+    bottom: 64px;
+    border-style: solid;
+    border-width: 0px 1px 1px 1px;
+    border-color: #c6c6c6;
+    border-radius: 0 0 5px 5px;
+    font-family: "OpenSans-Regular";
+    font-size: 10.5px;
+    position: fixed;
+    right: 50px;
+    text-align: left;
+    width: 300px;
+}
+
+    #regillaCliente p, #regillaClienteInsumos p, #regillaMercaderista p {
+        font-family: "OpenSans-Regular";
+        font-size: 12px;
+        margin: 3px 0;
+        text-align: center;
+    }
+
+        #regillaCliente p b, #regillaClienteInsumos p b, #regillaMercaderista p b {
+            font-weight: bold;
+        }
+
+    #regillaCliente h4, #regillaClienteInsumos h4, #regillaMercaderista h4 {
+        background-color: #F45E5E;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12.5px;
+        margin: 0!important;
+        padding: 5px 0;
+        text-align: center;
+        user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    #regillaCliente .ocultarMostrarGridClientes, #regillaClienteInsumos .ocultarMostrarGridClientes, #regillaCliente .ocultarMostrarGridClientesMercaderista,
+    #regillaMercaderista  .ocultarMostrarGridClientesMercaderista{
+        max-height: 102px;
+        overflow-y: scroll;
+    }
+
+    #regillaClienteInsumos h4 {
+        background-color: #1B8C23!important;
+    }
+
+.regillaClienteMercaderista, .regillaClienteInsumos, #regillaCliente {
+    float: left;
+    margin-bottom: 6px;
+    max-width: 560px;
+    min-width: 300px;
+    position: relative!important;
+    top: 0!important;
+    left: 0!important;
+    width: 60%!important;
+}
+
+    .regillaClienteMercaderista h4 {
+        background-color: #4285F4!important;
+    }
+
+.regillaClienteInsumos {
+    max-width: 660px;
+}
+
+.gClassClientes {
+    /*background-color: #424242;*/
+    border-collapse: collapse;
+}
+
+    .gClassClientes td {
+        border: solid 1px #c1c1c1;
+        color: #717171;
+        font-size: 10px;
+        padding: 5px 2px;
+    }
+
+    .gClassClientes th {
+        background-color: #424242;
+        color: #fff;
+        font-size: 12px;
+        padding: 2px 2px;
+    }
+
+    .gClassClientes .gPager table {
+        margin: 5px 0;
+    }
+
+    .gClassClientes .gPager td {
+        border-width: 0;
+        padding: 0 6px;
+        border-left: solid 1px #666;
+        color: #fff;
+        line-height: 12px;
+    }
+
+    .gClassClientes .triggerMarkerCss {
+        padding: 1px;
+    }
+
+.triggerMarkerCss a {
+    text-decoration: none;
+}
+
+.seguimientoControl {
+    background-color: #fff;
+    border-radius: 2px;
+    bottom: 14px!important;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+    padding: 9px 2px 2px 2px;
+}
+
+    .seguimientoControl .flechaAntes {
+        border-right: 1px solid #cdcdcd;
+    }
+
+    .seguimientoControl .flechaAntes, .seguimientoControl .flechaSiguiente {
+        cursor: pointer;
+        margin: 5px 0px 2px;
+        padding: 0 8px;
+    }
+
+    .seguimientoControl .pNumeroPosiciones {
+        color: #595959;
+        font-weight: 500;
+        margin: 2px 0;
+        text-align: center;
+    }
+
+#contenedorMapa {
+    height: 580px;
+}
+
+@media screen and ( max-height: 600px ) {
+    #contenedorMapa {
+        height: 380px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .regillaClienteMercaderista, .regillaClienteInsumos, #regillaCliente {
+        min-width: 100%;
+    }
+}
