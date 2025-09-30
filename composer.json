@@ -14,7 +14,6 @@
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^1.2",
-        "scopdrag/laravel-google-chart": "^1.0",
         "yajra/laravel-datatables-oracle": "^9.10"
     },
     "require-dev": {
