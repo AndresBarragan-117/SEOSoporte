@@ -22,11 +22,13 @@ class PlantillaListaController extends CustomController
 
         parent::__construct($this->tag);
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */ 
+    // funcion para mostrar la lista de plantillas
     public function index()
     {
         $listaPlantilla = DB::table("Implementacion.Plantilla")->orderBy('idPlantilla', 'asc')->get();
@@ -36,8 +38,6 @@ class PlantillaListaController extends CustomController
             "listaPlantilla"=> $listaPlantilla,
             "listaTipoCaptura"=>$listaTipoCaptura
         ]);
-        
-       
     }
 
     /**
@@ -46,9 +46,11 @@ class PlantillaListaController extends CustomController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // funcion para guarda un nuevo registro de lista de plantilla
     public function store(PlantillaListaValidator $request)
     {
         
+        // validar los datos enviados por el formulario 
         $validator = Validator::make(
             $request->all(), 
             $request->rules(),
@@ -75,9 +77,10 @@ class PlantillaListaController extends CustomController
             } catch(Exception $e) {
                 return back()->with('alert-danger', $e->getMessage())->withInput();
             }
+
+            // enviar mensaje de exito
             $request->session()->flash('alert-success', 'La Lista de la Plantilla se guardó correctamente.');
             return redirect()->route('plantillaLista.index');
-
         }
     }
 
@@ -87,6 +90,7 @@ class PlantillaListaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para consultar todas las listas de plantilla
     public function show()
     {
         
@@ -102,9 +106,6 @@ class PlantillaListaController extends CustomController
                                 "listaTipoCaptura"=>$datos,
                                 "data"=> $datos
                             ]);
-
-
-
     }
 
     /**
@@ -113,6 +114,7 @@ class PlantillaListaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para buscar un registro específico de lista de plantilla
     public function edit($id)
     {
         $plantillaLista = PlantillaLista::find($id);
@@ -122,9 +124,7 @@ class PlantillaListaController extends CustomController
                                     "edit"=>$plantillaLista,
                                     "listaPlantilla"=> $listaPlantilla,
                                     "listaTipoCaptura"=>$listaTipoCaptura
-                                     ]);
-
-                                                                   
+                                     ]);                                               
     }
 
     /**
@@ -134,6 +134,7 @@ class PlantillaListaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para actualizar un registro existente de lista de plantilla
     public function update(Request $request, $id)
     {
         
@@ -185,14 +186,26 @@ class PlantillaListaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para eliminar una lista de plantilla
     public function destroy($id)
     {
-        PlantillaLista::destroy($id);
-        return back();
+
+        $plantilla = PlantillaLista::find($id);
+
+        if ($plantilla) {
+            $nombre = $plantilla->nombre; // Guardamos el nombre antes de borrarlo
+            $plantilla->delete();
+
+            return redirect()->back()->with('alert-success', "La Lista de la Plantilla '$nombre' fue eliminada correctamente.");
+        }
+
+        return redirect()->back()->with('alert-danger', "No se encontró el registro a eliminar.");
     }
     
+    // funcion para cargar una lista de plantilla
     public function cargarPlantillaLista($idEmpresa, $idPlantilla) 
     {
+        
         $resultado = DB::select('SELECT
                                         COALESCE(ie.valor, null) as valor, COALESCE(TO_CHAR(ie."fechaRealiza":: DATE, \'dd/mm/yyyy\'), null) as "fechaRealiza", COALESCE(ie.observacion, null) as observacion,tc.nombre as "codigoTipoCaptura",
                                         pl.*
