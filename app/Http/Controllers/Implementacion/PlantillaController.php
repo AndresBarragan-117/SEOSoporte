@@ -25,6 +25,7 @@ class PlantillaController extends CustomController
      *
      * @return \Illuminate\Http\Response
      */ 
+    // funcion para mostrar la lista de plantillas
     public function index()
     {
         $resultado = DB::select("Select \"idTipoPlantilla\",nombre from \"Implementacion\".\"TipoPlantilla\"");
@@ -32,9 +33,6 @@ class PlantillaController extends CustomController
         [
             "listadoTipoPlantilla"=> $resultado
         ]);
-
-       
-
     }
 
     /**
@@ -43,6 +41,7 @@ class PlantillaController extends CustomController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // funcion para guarda un nuevo registro de plantilla
     public function store(PlantillaValidator $request)
     {
         $validator = Validator::make(
@@ -76,6 +75,7 @@ class PlantillaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para consultar todas las plantillas
     public function show()
     {
         $datos = DB::table('Implementacion.Plantilla as c')
@@ -96,6 +96,7 @@ class PlantillaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para buscar un registro específico de plantilla
     public function edit($id)
     {
         $plantilla = Plantilla::find($id);
@@ -113,6 +114,7 @@ class PlantillaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para actualizar un registro existente de plantilla
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), 
@@ -157,12 +159,24 @@ class PlantillaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function destroy($id)
+    // {
+    //     Plantilla::destroy($id);
+    //     return back();
+    // }
+    // funcion para eliminar una plantilla
     public function destroy($id)
     {
-        Plantilla::destroy($id);
-        return back();
+        $plantilla = Plantilla::find($id);
+        if ($plantilla) {
+            $nombre = $plantilla->nombre;
+            $plantilla->delete();
+            return back()->with('alert-success', "La plantilla '$nombre' fue eliminada correctamente.");
+        }
+        return back()->with('alert-danger', "No se encontró la plantilla a eliminar.");
     }
-    
+
+    // funcion para obtener las plantillas por tipo de plantilla
     public function obtenerPlantilla($idTipoPlantilla) {
         $resultado = DB::select("SELECT 
                                     \"idPlantilla\",

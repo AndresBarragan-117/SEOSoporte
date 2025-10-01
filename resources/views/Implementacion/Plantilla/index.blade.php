@@ -94,8 +94,8 @@
 							<form id="formDelete" action="{{ route('plantilla.destroy', $dt->idPlantilla) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
-								<a href="{{ $dt->idPlantilla.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-								<button type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
+								<a title="Editar" href="{{ $dt->idPlantilla.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
 							</form>
 						</td>
 					</tr>
