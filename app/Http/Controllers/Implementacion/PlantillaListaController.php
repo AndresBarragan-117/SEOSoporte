@@ -69,9 +69,11 @@ class PlantillaListaController extends CustomController
                 $plantillaLista->idUsuarioModificacion = Auth::id();
                 $plantillaLista->save();
               
-                
+            // } catch(Exception $e) {
+            //     return $this->error($request,$e);
+            // }
             } catch(Exception $e) {
-                return $this->error($request,$e);
+                return back()->with('alert-danger', $e->getMessage())->withInput();
             }
             $request->session()->flash('alert-success', 'La Lista de la Plantilla se guardó correctamente.');
             return redirect()->route('plantillaLista.index');
@@ -156,26 +158,25 @@ class PlantillaListaController extends CustomController
                         ->withErrors($validator)
                         ->withInput();
         }
-         
+        
+        try {
+            $plantillaLista = PlantillaLista::find($id);
+            $plantillaLista->nombre = $request->nombre;
+            $plantillaLista->descripcion = $request->descripcion;
+            $plantillaLista->idPlantilla = $request->listaPlantilla;
+            $plantillaLista->numeroOrdenLista = $request->numeroOrdenLista;
+            $plantillaLista->idTipoCaptura = $request->listaTipoCaptura;
+            $plantillaLista->opcionTipoCaptura = $request->opcionTipoCaptura;
+            $plantillaLista->estado = $request->estado;
+            $plantillaLista->idUsuarioModificacion = Auth::id();
+            $plantillaLista->save();
 
-            try {
-                $plantillaLista = PlantillaLista::find($id);
-                $plantillaLista->nombre = $request->nombre;
-                $plantillaLista->descripcion = $request->descripcion;
-                $plantillaLista->idPlantilla = $request->listaPlantilla;
-                $plantillaLista->numeroOrdenLista = $request->numeroOrdenLista;
-                $plantillaLista->idTipoCaptura = $request->listaTipoCaptura;
-                $plantillaLista->opcionTipoCaptura = $request->opcionTipoCaptura;
-                $plantillaLista->estado = $request->estado;
-                $plantillaLista->idUsuarioModificacion = Auth::id();
-                $plantillaLista->save();
+            $request->session()->flash('alert-success', 'La Lista de la Plantilla se ha modificado correctamente.');
+            return redirect()->route('plantillaLista.index');
 
-                $request->session()->flash('alert-success', 'La Lista de la Plantilla se ha modificado correctamente.');
-                return redirect()->route('plantillaLista.index');
-
-                } catch (Exception $e) {
-            return $this->error($request,$e);
-                }
+        } catch (Exception $e) {
+            return back()->with('alert-danger', $e->getMessage());
+        }
     }
 
     /**
