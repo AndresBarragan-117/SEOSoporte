@@ -14,17 +14,14 @@ class CreateTipoPlantillasTable extends Migration
     public function up()
     {
         Schema::create('Implementacion.TipoPlantilla', function (Blueprint $table) {
-            $table->bigIncrements('idTipoPlantilla');
-            $table->string('nombre');
-            $table->string('descripcion');
-            $table->boolean('estado');
-            $table->integer('idUsuarioCreacion');
-            $table->integer('idUsuarioModificacion');
-            $table->timestamps();
-
-            
-        });
-
+                $table->bigIncrements('idTipoPlantilla');
+                $table->string('nombre', 255);
+                $table->string('descripcion', 255);
+                $table->boolean('estado');
+                $table->integer('idUsuarioCreacion');
+                $table->integer('idUsuarioModificacion');
+                $table->timestamps();
+            });
     }
 
     /**

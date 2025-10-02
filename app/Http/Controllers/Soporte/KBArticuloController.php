@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Soporte;
 
 use Illuminate\Support\Facades\DB;
 use App\Model\Soporte\Categoria;
+use App\Model\Soporte\KBArticuloTipo;
 use App\Model\Soporte\Votacion;
 use App\Http\Controllers\CustomController;
 use Illuminate\Http\Request;
@@ -28,10 +29,12 @@ class KBArticuloController extends CustomController
      */
     public function index()
     {
-        $data = DB::table('Soporte.KBArticuloCategoria')->get();
+        $categorias = DB::table('Soporte.KBArticuloCategoria')->get();
+        $tipos = KBArticuloTipo::all();
 
         return $this->views("soporte.kbArticulo.index", [
-            'categorias' => $data
+            "categorias" => $categorias,
+            "tipos" => $tipos
         ]);
     }
 
@@ -41,6 +44,7 @@ class KBArticuloController extends CustomController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // funcion para guarda un nuevo registro de articulo
     public function store(KBArticuloValidator $request)
     {
         $validator = Validator::make(
@@ -75,19 +79,27 @@ class KBArticuloController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para consultar todos los registros de articulo
     public function show()
     {
         $datos = DB::table('Soporte.KBArticulo as c')
             ->leftJoin('Soporte.KBArticuloCategoria as c2', 'c.idKBArticuloCategoria', '=','c2.idKBArticuloCategoria')
-            ->select("c.idKBArticulo","c.asunto", "c2.nombre AS categoria", "c.tipo")
+            ->leftJoin('Soporte.KBArticuloTipo as t', 'c.tipo', '=', 't.idKBArticuloTipo') // Relación con la tabla Tipo
+            ->select("c.idKBArticulo",
+                "c.asunto", 
+                "c2.nombre AS categoria", 
+                "t.nombre AS tipo" // AQUÍ muestras el nombre del tipo
+            )
             ->get();
 
         $data = DB::table('Soporte.KBArticuloCategoria')->get();
+        $tipos = KBArticuloTipo::all(); // usando el modelo
 
         return $this->views("soporte.kbArticulo.index",
                             [ 
                                 "data" =>$datos,
-                                'categorias' => $data
+                                'categorias' => $data,
+                                "tipos" => $tipos
                             ]);
     }
 
@@ -97,15 +109,18 @@ class KBArticuloController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para buscar un registro específico de articulo
     public function edit($id)
     {
         $kbArticulo = KBArticulo::find($id);
         $data = DB::table('Soporte.KBArticuloCategoria')->get();
+        $tipos = KBArticuloTipo::all();
 
         return $this->views("soporte.kbArticulo.edit",[
-                                        "edit"=>$kbArticulo,
-                                        'categorias' => $data
-                                     ]);
+            "edit"=>$kbArticulo,
+            'categorias' => $data,
+            "tipos" => $tipos
+        ]);
     }
 
     /**
@@ -115,6 +130,7 @@ class KBArticuloController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para actualizar un registro existente de articulo
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), 
@@ -153,10 +169,28 @@ class KBArticuloController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function destroy($id)
+    // {
+    //     //KBArticulo::destroy($id);
+    //     return back();
+    // }
+    // funcion para eliminar un articulo
     public function destroy($id)
     {
-        //KBArticulo::destroy($id);
-        return back();
+        try {
+            $articulo = KBArticulo::find($id);
+
+            if (!$articulo) {
+                return back()->with('alert-danger', 'No se encontro el articulo al eliminar.');
+            }
+
+            $asunto = $articulo->asunto;
+            $articulo->delete();
+
+            return back()->with('alert-success', "El articulo '$asunto' se ha eliminado correctamente.");
+        } catch (Exception $e) {
+            return back()->with('alert-danger', 'Error al eliminar el articulo. ' . $e->getMessage());
+        }
     }
 
     public function listadoBaseConocimiento($busqueda = '', $json = 0)

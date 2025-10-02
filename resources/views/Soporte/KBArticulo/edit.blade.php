@@ -64,11 +64,21 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="tipo">Tipo</label>
-						<select name="tipo" class="form-control">
+						<!-- <select name="tipo" class="form-control">
 							<option value="" selected>--Seleccione--</option>
 							<option value="0" {{old('estado',$edit->tipo) == '0' ?'selected':''}}>GRABADO</option>
 							<option value="1" {{old('estado',$edit->tipo) == '1' ?'selected':''}}>PUBLICO</option>
 							<option value="2" {{old('estado',$edit->tipo) == '2' ?'selected':''}}>SOPORTE</option>
+						</select> -->
+						<select name="tipo" class="form-control">
+							<option value="">--Seleccione--</option>
+							@foreach($tipos as $t)
+								@if (old('tipo') == $t->idKBArticuloTipo)
+									<option value="{{ $t->idKBArticuloTipo }}" selected>{{ $t->nombre }}</option>
+								@else
+									<option value="{{ $t->idKBArticuloTipo }}">{{ $t->nombre }}</option>
+								@endif
+							@endforeach
 						</select>
 						<div class="text-danger">{!!$errors->first('categoria', '<small>:message</small>')!!}</div>
 					</div>

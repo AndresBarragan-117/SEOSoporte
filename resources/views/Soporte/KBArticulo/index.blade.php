@@ -64,11 +64,21 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="tipo">Tipo</label>
-						<select name="tipo" class="form-control">
+						<!-- <select name="tipo" class="form-control">
 							<option value="" selected>--Seleccione--</option>
-							<option value="0">GRABADO</option>
-							<option value="1">PUBLICO</option>
-							<option value="2">SOPORTE</option>
+							<option value="1">GRABADO</option>
+							<option value="2">PUBLICO</option>
+							<option value="3">SOPORTE</option>
+						</select> -->
+						<select name="tipo" class="form-control">
+							<option value="">--Seleccione--</option>
+							@foreach($tipos as $t)
+								@if (old('tipo') == $t->idKBArticuloTipo)
+									<option value="{{ $t->idKBArticuloTipo }}" selected>{{ $t->nombre }}</option>
+								@else
+									<option value="{{ $t->idKBArticuloTipo }}">{{ $t->nombre }}</option>
+								@endif
+							@endforeach
 						</select>
 						<div class="text-danger">{!!$errors->first('categoria', '<small>:message</small>')!!}</div>
 					</div>
@@ -94,11 +104,15 @@
 						<td>{{$dt->categoria}}</td>
 						<td>{{$dt->tipo}}</td>
 						<td>
-							<form id="formDelete" action="{{ route('kbArticulo.destroy', $dt->idKBArticulo) }}" method="POST">
+							<!-- <form id="formDelete" action="{{ route('kbArticulo.destroy', $dt->idKBArticulo) }}" method="POST"> -->
+							<form class="formDelete" action="{{ route('kbArticulo.destroy', $dt->idKBArticulo) }}" method="POST">	
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
-								<a href="{{ $dt->idKBArticulo.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-								<button type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
+								<a title="Editar" href="{{ $dt->idKBArticulo.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
+								<!-- <button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button> -->
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs delete-btn" data-name="{{ $dt->asunto }}">
+									<span class="fa fa-window-close"></span>
+								</button>
 							</form>
 						</td>
 					</tr>
@@ -116,10 +130,15 @@
 <script type="text/javascript" charset="utf-8" >
 	@if(isset($data))
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
-	$("#formDelete").submit(function(e)
-	{
-		if(!confirm("Está seguro de eliminar este registro?"))
-		{
+	// $("#formDelete").submit(function(e)
+	// {
+	// 	if(!confirm("Está seguro de eliminar este registro?"))
+	// 	{
+	// 		e.preventDefault();	
+	// 	}
+	// });
+	$(".formDelete").submit(function(e){
+		if(!confirm("¿Está seguro de eliminar este registro?")) {
 			e.preventDefault();	
 		}
 	});

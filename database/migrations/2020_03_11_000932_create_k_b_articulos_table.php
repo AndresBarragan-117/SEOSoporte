@@ -18,7 +18,8 @@ class CreateKBArticulosTable extends Migration
             $table->bigInteger('idKBArticuloCategoria');
             $table->string('asunto', 250);
             $table->longText('contenido');
-            $table->integer('tipo'); //0=>GRABADO, 1=>PUBLICO, 2=>SOPORTE
+            // $table->integer('tipo'); //0=>GRABADO, 1=>PUBLICO, 2=>SOPORTE
+            $table->bigInteger('idTipo'); // FK HACIA KBArticuloTipo
             $table->integer('cantidadVistos');
             $table->integer('cantidadVotos');
             $table->integer('cantidadVotacion');
@@ -28,6 +29,7 @@ class CreateKBArticulosTable extends Migration
             $table->timestamps();
 
             $table->foreign('idKBArticuloCategoria')->references('idKBArticuloCategoria')->on('Soporte.KBArticuloCategoria');
+            $table->foreign('idTipo')->references('idKBArticuloTipo')->on('Soporte.KBArticuloTipo');
         });
     }
 

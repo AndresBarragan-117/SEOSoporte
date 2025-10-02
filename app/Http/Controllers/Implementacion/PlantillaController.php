@@ -87,7 +87,6 @@ class PlantillaController extends CustomController
                                 "data" =>$datos,
                                 "listadoTipoPlantilla" =>$resultado
                             ]);
-
     }
 
     /**
@@ -167,14 +166,22 @@ class PlantillaController extends CustomController
     // funcion para eliminar una plantilla
     public function destroy($id)
     {
-        $plantilla = Plantilla::find($id);
-        if ($plantilla) {
+        try {
+            $plantilla = Plantilla::find($id);
+
+            if (!$plantilla) {
+                return back()->with('alert-danger', "No se encontró la plantilla a eliminar.");
+            }
+
             $nombre = $plantilla->nombre;
             $plantilla->delete();
+
             return back()->with('alert-success', "La plantilla '$nombre' fue eliminada correctamente.");
+        } catch (Exception $e) {
+            return back()->with('alert-danger', "Error al eliminar: " . $e->getMessage());
         }
-        return back()->with('alert-danger', "No se encontró la plantilla a eliminar.");
     }
+
 
     // funcion para obtener las plantillas por tipo de plantilla
     public function obtenerPlantilla($idTipoPlantilla) {
