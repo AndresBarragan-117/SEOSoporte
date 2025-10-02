@@ -31,6 +31,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="categoria">Categoría</label>
+
 						<select name="categoria" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($categorias as $p)
@@ -64,12 +65,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="tipo">Tipo</label>
-						<!-- <select name="tipo" class="form-control">
-							<option value="" selected>--Seleccione--</option>
-							<option value="0" {{old('estado',$edit->tipo) == '0' ?'selected':''}}>GRABADO</option>
-							<option value="1" {{old('estado',$edit->tipo) == '1' ?'selected':''}}>PUBLICO</option>
-							<option value="2" {{old('estado',$edit->tipo) == '2' ?'selected':''}}>SOPORTE</option>
-						</select> -->
+						
 						<select name="tipo" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($tipos as $t)
@@ -94,6 +90,7 @@
 
 <script type="text/javascript" charset="utf-8" >
 	@if(isset($data))
+	// script para mostrar la pestaña de consulta
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
 	@endif
 

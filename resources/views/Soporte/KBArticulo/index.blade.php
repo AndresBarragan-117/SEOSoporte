@@ -31,6 +31,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="categoria">Categoría</label>
+
 						<select name="categoria" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($categorias as $p)
@@ -64,12 +65,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="tipo">Tipo</label>
-						<!-- <select name="tipo" class="form-control">
-							<option value="" selected>--Seleccione--</option>
-							<option value="1">GRABADO</option>
-							<option value="2">PUBLICO</option>
-							<option value="3">SOPORTE</option>
-						</select> -->
+
 						<select name="tipo" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($tipos as $t)
@@ -129,16 +125,12 @@
 @section('script')
 <script type="text/javascript" charset="utf-8" >
 	@if(isset($data))
+	// script para mostrar la pestaña de consulta
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
-	// $("#formDelete").submit(function(e)
-	// {
-	// 	if(!confirm("Está seguro de eliminar este registro?"))
-	// 	{
-	// 		e.preventDefault();	
-	// 	}
-	// });
+	
+	// script confirmar si se elimina una plantilla
 	$(".formDelete").submit(function(e){
-		if(!confirm("¿Está seguro de eliminar este registro?")) {
+		if(!confirm("¿Está seguro de eliminar este artículo?")) {
 			e.preventDefault();	
 		}
 	});

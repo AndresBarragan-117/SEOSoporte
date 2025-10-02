@@ -125,11 +125,14 @@
 						<td>{{$dt->nombre}}</td>
 						<td>{{$dt->descripcion}}</td>
 						<td>
-							<form id="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
+							<form class="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
 								<a title="Editar" href="{{ $dt->idPlantillaLista.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
+								{{-- <button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button> --}}
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs delete-btn" data-name="{{ $dt->nombre }}">
+									<span class="fa fa-window-close"></span>
+								</button>
 							</form>
 						</td>
 					</tr>
@@ -148,15 +151,12 @@
 <script type="text/javascript" charset="utf-8" >
 	@if(isset($data))
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
-
-	$("#formDelete").submit(function(e)
-	{
-
-		if(!confirm("Está seguro de eliminar este registro?"))
-		{
+	
+	// script confirmar si se elimina una plantilla
+	$(".formDelete").submit(function(e){
+		if(!confirm("¿Está seguro de eliminar esta plantilla?")) {
 			e.preventDefault();	
 		}
-
 	});
 	@endif
 </script>
