@@ -12,6 +12,8 @@
 */
 
 //use Illuminate\Routing\Route;
+
+use App\Http\Controllers\Soporte\KBArticuloController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,6 +29,8 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/home', 'HomeController@index')->name('home');
 
 /** Seguridad **/
+// resource es la forma rápida y automática en Laravel para registrar todas las rutas CRUD 
+// (Crear, Leer, Actualizar, Eliminar) para un controlador
 Route::resource('/usuario', 'Seguridad\UsuarioController'); //->name('index', 'usuario');
 Route::resource('/carpeta', 'Seguridad\CarpetaController'); //->name('index', 'usuario');
 Route::resource('/formulario', 'Seguridad\FormularioController'); //->name('index', 'usuario');
@@ -36,10 +40,10 @@ Route::resource('/rol', 'Seguridad\RolController'); //->name('index', 'usuario')
 Route::resource('/categoria', 'Soporte\CategoriaController');
 Route::resource('/kbArticuloCategoria', 'Soporte\KBArticuloCategoriaController');
 
+Route::resource('/kbArticulo', 'Soporte\KBArticuloController');
 Route::post('/kbArticulo/calificarArticulo', 'Soporte\KBArticuloController@calificarArticulo');
 Route::get('/kbArticulo/listadoBaseConocimiento/{busqueda?}/{json?}', 'Soporte\KBArticuloController@listadoBaseConocimiento');
 Route::get('/kbArticulo/consultarContenidoArticulo/{idKbArticulo}', 'Soporte\KBArticuloController@consultarContenidoArticulo');
-Route::resource('/kbArticulo', 'Soporte\KBArticuloController');
 
 Route::get('/mensajePlantilla/consultarMensajePlantilla', 'Soporte\MensajePlantillaController@consultarMensajePlantilla');
 Route::resource('/mensajePlantilla', 'Soporte\MensajePlantillaController');

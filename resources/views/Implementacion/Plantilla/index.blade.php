@@ -16,7 +16,7 @@
 		{{ csrf_field() }}
 		<!-- Acciones(COnsultar, Guardar, Nuevo) -->
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('plantilla') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Nueva Plantilla" href="{{ url('plantilla') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
 			<a href="{{ url('plantilla/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
 			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
 		</div>

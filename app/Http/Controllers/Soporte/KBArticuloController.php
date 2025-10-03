@@ -93,7 +93,7 @@ class KBArticuloController extends CustomController
             ->get();
 
         $data = DB::table('Soporte.KBArticuloCategoria')->get();
-        $tipos = KBArticuloTipo::all(); // usando el modelo
+        $tipos = DB::table('Soporte.KBArticuloTipo')->get(); // Obtener todos los tipos de artículos
 
         return $this->views("soporte.kbArticulo.index",
                             [ 

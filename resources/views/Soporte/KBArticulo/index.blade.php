@@ -17,7 +17,7 @@
 		{{ csrf_field() }}
 		
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('kbArticulo') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Nuevo Articulo" href="{{ url('kbArticulo') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
 			<a href="{{ url('kbArticulo/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
 			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
 		</div>
@@ -49,7 +49,8 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="asunto">Asunto</label>
-						<input name="asunto" id="asunto" class="form-control" value="{{old('nombre')}}"></input>
+						<!-- <input name="asunto" id="asunto" class="form-control" value="{{ old('nombre') }}"></input> -->
+						<input name="asunto" id="asunto" class="form-control" value="{{ old('asunto') }}"></input>
 						<div class="text-danger">{!!$errors->first('asunto', '<small>:message</small>')!!}</div>
 					</div>
 				</div>
@@ -66,7 +67,7 @@
 					<div class="col-md-8">
 						<label for="tipo">Tipo</label>
 
-						<select name="tipo" class="form-control">
+						<!-- <select name="tipo" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($tipos as $t)
 								@if (old('tipo') == $t->idKBArticuloTipo)
@@ -75,8 +76,17 @@
 									<option value="{{ $t->idKBArticuloTipo }}">{{ $t->nombre }}</option>
 								@endif
 							@endforeach
+						</select> -->
+						<select name="tipo" class="form-control">
+							<option value="">--Seleccione--</option>
+							@foreach($tipos as $t)
+								<option value="{{ $t->idKBArticuloTipo }}"
+									{{ old('tipo') == $t->idKBArticuloTipo ? 'selected' : '' }}>
+									{{ $t->nombre }}
+								</option>
+							@endforeach
 						</select>
-						<div class="text-danger">{!!$errors->first('categoria', '<small>:message</small>')!!}</div>
+						<div class="text-danger">{!! $errors->first('tipo', '<small>:message</small>') !!}</div>
 					</div>
 				</div>
 			</div>

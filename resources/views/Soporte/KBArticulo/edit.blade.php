@@ -18,7 +18,7 @@
 
 		{{ csrf_field() }}
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('kbArticulo') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Nuevo Articulo" href="{{ url('kbArticulo') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
 			<button type="submit" class="btn btn-info" title="Modificar"><span class="fa fa-edit" ></span></button>
 		</div>
 		<!-- Nav tabs -->
@@ -65,18 +65,22 @@
 				<div class="row">
 					<div class="col-md-8">
 						<label for="tipo">Tipo</label>
-						
+
 						<select name="tipo" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($tipos as $t)
-								@if (old('tipo') == $t->idKBArticuloTipo)
-									<option value="{{ $t->idKBArticuloTipo }}" selected>{{ $t->nombre }}</option>
-								@else
-									<option value="{{ $t->idKBArticuloTipo }}">{{ $t->nombre }}</option>
-								@endif
+								<option value="{{ $t->idKBArticuloTipo }}"
+									@if( old('tipo') == $t->idKBArticuloTipo )
+										selected
+									@elseif(isset($edit) && $edit->tipo == $t->idKBArticuloTipo)
+										selected
+									@endif
+								>
+									{{ $t->nombre }}
+								</option>
 							@endforeach
 						</select>
-						<div class="text-danger">{!!$errors->first('categoria', '<small>:message</small>')!!}</div>
+						<div class="text-danger">{!! $errors->first('tipo', '<small>:message</small>') !!}</div>
 					</div>
 				</div>
 			</div>
