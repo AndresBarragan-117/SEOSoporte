@@ -169,11 +169,6 @@ class KBArticuloController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // public function destroy($id)
-    // {
-    //     //KBArticulo::destroy($id);
-    //     return back();
-    // }
     // funcion para eliminar un articulo
     public function destroy($id)
     {
