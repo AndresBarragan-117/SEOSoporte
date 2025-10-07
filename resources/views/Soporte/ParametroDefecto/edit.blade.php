@@ -17,8 +17,8 @@
 
 		{{ csrf_field() }}
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('parametroDefecto') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
-			<button type="submit" class="btn btn-info" title="Modificar"><span class="fa fa-edit" ></span></button>
+			<a title="Nuevo Parametro Defecto" href="{{ url('parametroDefecto') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
+			<button title="Modificar" type="submit" class="btn btn-info"><span class="fa fa-edit" ></span></button>
 		</div>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" id="tabForm">

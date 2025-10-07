@@ -4,7 +4,6 @@
 @section('cuerpo')
 
 <div>
-	
 	<div class="flash-message">
 	@foreach (['danger', 'warning', 'success', 'info'] as $msg)
 		@if(Session::has('alert-' . $msg))
@@ -17,13 +16,14 @@
 		{{ csrf_field() }}
 		
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('parametroDefecto') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
-			<!--<a href="{{ url('parametroDefecto/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>-->
-			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
+			<a title="Nuevo Parametro Defecto" href="{{ url('parametroDefecto') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
+			<a title="Consultar" href="{{ url('parametroDefecto/show') }}" class="btn btn-info"><span class=" fa fa-search" ></span></a>
+			<button title="Guardar" type="submit" class="btn btn-info"><span class="fa fa-save"></span></button>
 		</div>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" id="tabForm">
 			<li class="nav-item"><a class="nav-link active" role="tab" href="#form" aria-controls="home" role="tab" data-toggle="tab"> Formulario</a></li>
+			<li class="nav-item"><a class="nav-link" role="tab" href="#consulta" aria-controls="consulta" role="tab" data-toggle="tab">Consulta</a></li>
 		</ul>
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="form">
@@ -118,7 +118,7 @@
 						<select name="ticketEstadoRechazar" class="form-control">
 							<option value="">--Seleccione--</option>
 							@foreach($ticketEstado as $p)
-								@if (old('idTicketEstadoRechazar') == $p->idTicketEstado)
+								@if (old('ticketEstadoRechazar') == $p->idTicketEstado)
 									<option value="{{$p->idTicketEstado}}" selected> {{ $p->nombre}}</option>
 								@else
 									<option value="{{$p->idTicketEstado}}"> {{ $p->nombre}}</option>
@@ -137,19 +137,59 @@
 					</div>
 				</div>
 			</div>
-		</form>	
+		</form>
+		<div role="tabpanel" class="tab-pane" id="consulta">
+			@if(isset($data))
+			
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Prioridad del Ticket</th>
+						<th>Estado del Ticket</th>
+						<th>Funcionario</th>
+						<th>Estado Finalizar del Ticket</th>
+						<th>Estado Archivar del Ticket</th>
+						<th>Estado Rechazar del Ticket</th>
+						<th>Días Archivar</th>
+						<th>Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($data as $dt)
+					<tr>
+						<td>{{$dt->ticketPrioridad}}</td>
+						<td>{{$dt->ticketEstado}}</td>
+						<td>{{$dt->funcionario}}</td>
+						<td>{{$dt->ticketEstadoFinalizar}}</td>
+						<td>{{$dt->ticketEstadoArchivar}}</td>
+						<td>{{$dt->ticketEstadoRechazar}}</td>
+						<td>{{$dt->diasArchivar}}</td>
+						<td>
+							<form class="formDelete" action="{{ route('parametroDefecto.destroy', $dt->idParametroDefecto) }}" method="POST">
+								<input type="hidden" value="DELETE" name="_method">
+								{{ csrf_field() }}
+								<a title="Editar" href="{{ $dt->idParametroDefecto.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-trash"></span></button>
+							</form>
+						</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+			@endif
+		</div>
 	</div>
 </div>
-
 @stop
 
 @section('script')
 <script type="text/javascript" charset="utf-8" >
 	@if(isset($data))
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
-	$("#formDelete").submit(function(e)
+	
+	$(".formDelete").submit(function(e)
 	{
-		if(!confirm("Está seguro de eliminar este registro?"))
+		if(!confirm("Está seguro de eliminar este parámetro?"))
 		{
 			e.preventDefault();	
 		}

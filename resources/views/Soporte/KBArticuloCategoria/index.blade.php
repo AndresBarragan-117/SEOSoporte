@@ -17,9 +17,9 @@
 		{{ csrf_field() }}
 		
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('kbArticuloCategoria') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
-			<a href="{{ url('kbArticuloCategoria/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
-			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
+			<a title="Nueva Categoría" href="{{ url('kbArticuloCategoria') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
+			<a title="Consultar" href="{{ url('kbArticuloCategoria/show') }}" class="btn btn-info"><span class=" fa fa-search" ></span></a>
+			<button title="Guardar" type="submit" class="btn btn-info" ><span class="fa fa-save"></span></button>
 		</div>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" id="tabForm">
@@ -89,11 +89,11 @@
 						<td>{{$dt->carpetaPadre ?? ''}}</td>
 						<td>{{$dt->nombreEtiqueta}}</td>
 						<td>
-							<form id="formDelete" action="{{ route('kbArticuloCategoria.destroy', $dt->idKBArticuloCategoria) }}" method="POST">
+							<form class="formDelete" action="{{ route('kbArticuloCategoria.destroy', $dt->idKBArticuloCategoria) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
-								<a href="{{ $dt->idKBArticuloCategoria.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-								<button type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
+								<a title="Editar" href="{{ $dt->idKBArticuloCategoria.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
 							</form>
 						</td>
 					</tr>
@@ -111,9 +111,11 @@
 <script type="text/javascript" charset="utf-8" >
 	@if(isset($data))
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
-	$("#formDelete").submit(function(e)
+
+	// script confirmar si se elimina una categoria
+	$(".formDelete").submit(function(e)
 	{
-		if(!confirm("Está seguro de eliminar este registro?"))
+		if(!confirm("Está seguro de eliminar esta categoria?"))
 		{
 			e.preventDefault();	
 		}

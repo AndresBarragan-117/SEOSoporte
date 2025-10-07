@@ -44,9 +44,25 @@ class KBArticuloCategoriaController extends CustomController
     public function store(KBArticuloCategoriaValidator $request)
     {
         $validator = Validator::make(
-                                    $request->all(), 
-                                    $request->rules(),
-                                    $request->messages()
+            $request->all(),
+            [
+                'nombre' => 'required|max:250',
+                'padreId' => 'nullable',
+                'nombreEtiqueta' => 'required',
+                'orden' => 'required'
+            ],
+            [
+                'nombre.required' => 'El nombre es requerido',
+                'nombre.max' => 'El máximo permitido son 250 caracteres',
+                'nombre.regex' => 'Sólo se aceptan letras',
+                'padreId.required' => 'El padre es requerido',
+                'nombreEtiqueta.required' => 'El nombre de la etiqueta es requerido',
+                'nombreEtiqueta.max' => 'El máximo permitido son 250 caracteres',
+                'nombreEtiqueta.regex' => 'Sólo se aceptan letras',
+                'orden.required' => 'El orden es requerido',
+                'orden.max' => 'El máximo permitido son 5 caracteres',
+                'orden.regex' => 'Sólo se aceptan números'
+            ]
         );
 
         if($validator->validate())
@@ -116,23 +132,27 @@ class KBArticuloCategoriaController extends CustomController
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), 
+        $validator = Validator::make(
+            $request->all(),
             [
-                'nombre' => 'required|max:250|regex:/^[aA-zZ -]+$/i',
-                'nombreEtiqueta' => 'required|max:300|regex:/^[aA-zZ \-0-9óíúáñé]+$/i',
-                'orden' => 'required|max:5|regex:/^[0-9]+$/'
+                'nombre' => 'required|max:250',
+                'padreId' => 'nullable',
+                'nombreEtiqueta' => 'required',
+                'orden' => 'required'
             ],
             [
-                'nombre.required' => 'La descripción es requerida',
+                'nombre.required' => 'El nombre es requerido',
                 'nombre.max' => 'El máximo permitido son 250 caracteres',
                 'nombre.regex' => 'Sólo se aceptan letras',
-                'nombreEtiqueta.required' => 'El nombre de la etiqueta es requerida',
+                // 'padreId.required' => 'El padre es requerido',
+                'nombreEtiqueta.required' => 'El nombre de la etiqueta es requerido',
                 'nombreEtiqueta.max' => 'El máximo permitido son 250 caracteres',
                 'nombreEtiqueta.regex' => 'Sólo se aceptan letras',
                 'orden.required' => 'El orden es requerido',
                 'orden.max' => 'El máximo permitido son 5 caracteres',
                 'orden.regex' => 'Sólo se aceptan números'
-            ]);
+            ]
+        );
 
         if ($validator->fails()) {
             return redirect('/kbArticuloCategoria/'.$id.'/edit')
@@ -165,7 +185,19 @@ class KBArticuloCategoriaController extends CustomController
      */
     public function destroy($id)
     {
-        KBArticuloCategoria::destroy($id);
-        return back();
+        try {
+            $kbArticuloCategoria = KBArticuloCategoria::find($id);
+
+            if (!$kbArticuloCategoria) {
+                return back()->with('alert-danger', 'No se encontro la Categoría al eliminar.');
+            }
+
+            $nombre = $kbArticuloCategoria->nombre;
+            $kbArticuloCategoria->delete();
+
+            return back()->with('alert-success', "La Categoría '$nombre' se ha eliminado correctamente.");
+        } catch (Exception $e) {
+            return back()->with('alert-danger', 'Error al eliminar la Categoría. ' . $e->getMessage());
+        }
     }
 }

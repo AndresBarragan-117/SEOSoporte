@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Str;
 
 class Handler extends ExceptionHandler
 {
@@ -36,6 +37,22 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        // --- DEBUG: filtrar rutas innecesarias (.map y .well-known) -----------------------------------------
+        try {
+            $path = request()->path();
+
+            if (
+                Str::contains($path, '.map') ||
+                Str::contains($path, '.well-known')
+            ) {
+                // No reportar estos errores
+                return;
+            }
+        } catch (\Throwable $t) {
+            // En caso de que request() no esté disponible (por consola, etc.)
+        }
+        // --- FIN DEBUG --------------------------------------------------------------------------------------
+
         parent::report($exception);
     }
 
@@ -50,6 +67,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // --- DEBUG: mostrar la excepción en la pantalla -----------------------------------------------------
+        try {
+            $path = $request->path();
+
+            // Ignorar errores de archivos .map o .well-known
+            if (
+                \Illuminate\Support\Str::contains($path, '.map') ||
+                \Illuminate\Support\Str::contains($path, '.well-known')
+            ) {
+                // No registrar este error ni mostrarlo
+                return response('', 204); // Respuesta vacía sin error
+            }
+        } catch (\Throwable $t) {
+            // Silenciar si request() no existe
+        }
+
+        // Solo loguea errores "reales"
+        \Log::error("❌ Error detectado: " . $exception->getMessage(), [
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+        ]);
+        // --- FIN DEBUG ----------------------------------------------------------------------------
+
         return parent::render($request, $exception);
     }
+
 }

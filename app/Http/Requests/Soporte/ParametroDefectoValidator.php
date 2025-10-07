@@ -13,7 +13,8 @@ class ParametroDefectoValidator extends FormRequest{
             'funcionario' => 'required',
             'ticketEstadoFinalizar' => 'required',
             'ticketEstadoArchivar' => 'required',
-            'diasArchivar' => 'required|max:5|regex:/^[0-9]+$/'
+            'ticketEstadoRechazar' => 'required',
+            'diasArchivar' => 'required|integer|max:5'
         ];  
     }
     
@@ -24,6 +25,7 @@ class ParametroDefectoValidator extends FormRequest{
             'funcionario.required' => 'El funcionario es requerido',
             'ticketEstadoFinalizar.required' => 'El estado de finalización es requerido',
             'ticketEstadoArchivar.required' => 'El estado de archivar es requerido',
+            'ticketEstadoRechazar.required' => 'El estado de rechazar es requerido',
             'diasArchivar.required' => 'Los días a archivar es requerido',
             'diasArchivar.max' => 'El máximo permitido son 5 caracteres'
         ];

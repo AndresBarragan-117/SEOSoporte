@@ -50,15 +50,19 @@ Route::post('/implementacionEmpresa/guardar', 'Implementacion\ImplementacionEmpr
 
 Route::get('/plantilla/obtenerPlantilla/{idTipoPlantilla}', 'Implementacion\PlantillaController@obtenerPlantilla');
 Route::resource('/plantilla', 'Implementacion\PlantillaController');
+Route::get('/plantillaLista/cargarPlantillaLista/{idEmpresa}/{idPlantilla}', 'Implementacion\PlantillaListaController@cargarPlantillaLista');
+Route::resource('/plantillaLista', 'Implementacion\PlantillaListaController');
 Route::resource('/tipoCaptura', 'Implementacion\TipoCapturaController');
 
 Route::get('/mensajePlantilla/consultarMensajePlantilla', 'Soporte\MensajePlantillaController@consultarMensajePlantilla');
 Route::resource('/mensajePlantilla', 'Soporte\MensajePlantillaController');
 
+Route::resource('/parametroDefecto', 'Soporte\ParametroDefectoController');
+
 Route::resource('/ticketPrioridad', 'Soporte\TicketPrioridadController');
 Route::resource('/ticketEstado', 'Soporte\TicketEstadoController');
 Route::resource('/ticketEmailPlantilla', 'Soporte\TicketEmailPlantillaController');
-Route::resource('/parametroDefecto', 'Soporte\ParametroDefectoController');
+
 
 Route::resource('/registro', 'Seguridad\RegistroController',['only'=> ['index','store']]);
 
@@ -88,14 +92,15 @@ Route::post('/usuario/cambiarAtencion', 'Seguridad\UsuarioController@cambiarAten
 Route::post('/ticketSoporte/nuevaTarea', 'Soporte\TicketSoporteController@nuevaTarea');
 Route::post('/ticketSoporte/cambiarPrioridadTicket', 'Soporte\TicketSoporteController@cambiarPrioridadTicket');
 
-Route::post('/ticketSoporte/notificacionTicket', 'Soporte\TicketSoporteController@notificacionTicket');
+//------> Route::post('/ticketSoporte/notificacionTicket', 'Soporte\TicketSoporteController@notificacionTicket'); AQUI SE GENERA EL ERROR DE VERIFICACION CSRF <-----------
+// el mensaje en el log (RouteCollection.php line 179/192/204 era una respuesta implícita de Laravel al rechazar la petición por verificación CSRF fallida 
+// (es decir, un error de token mismatch o MethodNotAllowed antes de llegar al controlador).
+// Laravel protege todas las rutas POST, PUT, PATCH y DELETE con el middleware VerifyCsrfToken.
+// Si tu cliente (por ejemplo, JavaScript, un cron, o un webhook externo) envía una solicitud POST sin el token CSRF, 
+// Laravel bloquea la petición antes de llegar al controlador.
 
 Route::post('/ticketSoporte/consultarAnexoTicket', 'Soporte\TicketSoporteController@consultarAnexoTicket');
 Route::get('/ticketSoporte/ticketEstadoTarea', 'Soporte\TicketSoporteController@ticketEstadoTarea');
-
-Route::get('/plantillaLista/cargarPlantillaLista/{idEmpresa}/{idPlantilla}', 'Implementacion\PlantillaListaController@cargarPlantillaLista');
-Route::resource('/plantillaLista', 'Implementacion\PlantillaListaController');
-
 
 // Registration Routes...
 //$this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');

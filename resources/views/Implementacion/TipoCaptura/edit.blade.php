@@ -18,7 +18,7 @@
 		<!-- Acciones(Nuevo, Modificar) -->
 		{{ csrf_field() }}
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a title="Nuevo Tipo Captura" href="{{ url('tipoCaptura') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Nuevo Tipo Captura" href="{{ url('tipoCaptura') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
 			<button type="submit" class="btn btn-info" title="Modificar"><span class="fa fa-edit" ></span></button>
 		</div>
 		<!-- Nav tabs -->

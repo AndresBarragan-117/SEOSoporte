@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class ParametroDefectoController extends CustomController
 {
     protected $tag = '106';
-    
+
     public function __construct()
     {
         parent::__construct($this->tag);
@@ -29,22 +29,18 @@ class ParametroDefectoController extends CustomController
         $ticketPrioridad = DB::table('Soporte.TicketPrioridad')->get();
         $ticketEstado = DB::table('Soporte.TicketEstado')->get();
         $funcionario = DB::table('Soporte.Funcionario')->get();
-        
-        $parametroDefecto = DB::table('Soporte.ParametroDefecto')->first();
-        if(isset($parametroDefecto)) {
-            return $this->views("soporte.parametroDefecto.edit",[
-                                            "edit"=>$parametroDefecto,
-                                            'ticketPrioridad' => $ticketPrioridad,
-                                            'ticketEstado' => $ticketEstado,
-                                            'funcionario' => $funcionario
-                                        ]);
-        } else {
-            return $this->views("soporte.parametroDefecto.index", [
-                'ticketPrioridad' => $ticketPrioridad,
-                'ticketEstado' => $ticketEstado,
-                'funcionario' => $funcionario
+
+        if ($ticketPrioridad->isEmpty() || $ticketEstado->isEmpty() || $funcionario->isEmpty()) {
+            return $this->views('soporte.parametroDefecto.index', [
+                'error' => 'No se encontraron datos en las tablas relacionadas.'
             ]);
         }
+
+        return $this->views("soporte.parametroDefecto.index", [
+            'ticketPrioridad' => $ticketPrioridad,
+            'ticketEstado' => $ticketEstado,
+            'funcionario' => $funcionario
+        ]);
     }
 
     /**
@@ -56,13 +52,29 @@ class ParametroDefectoController extends CustomController
     public function store(ParametroDefectoValidator $request)
     {
         $validator = Validator::make(
-                                    $request->all(), 
-                                    $request->rules(),
-                                    $request->messages()
+            $request->all(),
+            [
+                'ticketPrioridad' => 'required',
+                'ticketEstado' => 'required',
+                'funcionario' => 'required',
+                'ticketEstadoFinalizar' => 'required',
+                'ticketEstadoArchivar' => 'required',
+                'ticketEstadoRechazar' => 'required',
+                'diasArchivar' => 'required|integer|max:5'
+            ],
+            [
+                'ticketPrioridad.required' => 'La prioridad del ticket es requerida',
+                'ticketEstado.required' => 'El estado del ticket es requerido',
+                'funcionario.required' => 'El funcionario es requerido',
+                'ticketEstadoFinalizar.required' => 'El estado de finalización es requerido',
+                'ticketEstadoArchivar.required' => 'El estado de archivar es requerido',
+                'ticketEstadoRechazar.required' => 'El estado de rechazar es requerido',
+                'diasArchivar.required' => 'Los días a archivar es requerido',
+                'diasArchivar.max' => 'El máximo permitido son 5 caracteres'
+            ]
         );
 
-        if($validator->validate())
-        {
+        if ($validator->validate()) {
             try {
                 $parametroDefecto = new ParametroDefecto();
                 $parametroDefecto->idTicketPrioridad = $request->ticketPrioridad;
@@ -74,10 +86,10 @@ class ParametroDefectoController extends CustomController
                 $parametroDefecto->diasArchivar = $request->diasArchivar;
                 $parametroDefecto->idUsuarioCreacion = Auth::id();
                 $parametroDefecto->idUsuarioModificacion = Auth::id();
-                
+
                 $parametroDefecto->save();
-            } catch(Exception $e) {
-                return $this->error($request,$e);
+            } catch (Exception $e) {
+                return $this->error($request, $e);
             }
             $request->session()->flash('alert-success', 'El parámetro se guardó correctamente.');
             return redirect()->route('parametroDefecto.index');
@@ -93,26 +105,36 @@ class ParametroDefectoController extends CustomController
     public function show()
     {
         $datos = DB::table('Soporte.ParametroDefecto as c')
-            ->join('Soporte.TicketPrioridad as tp', 'c.idTicketPrioridad', '=','tp.idTicketPrioridad')
-            ->join('Soporte.TicketEstado as te', 'c.idTicketEstado', '=','te.idTicketEstado')
-            ->join('Soporte.Funcionario as f', 'c.idFuncionario', '=','f.idFuncionario')
-            ->join('Soporte.TicketEstado as tef', 'c.idTicketEstadoFinalizar', '=','tef.idTicketEstado')
-            ->join('Soporte.TicketEstado as tea', 'c.idTicketEstadoArchivar', '=','tea.idTicketEstado')
-            ->join('Soporte.TicketEstado as ter', 'c.idTicketEstadoRechazar', '=','ter.idTicketEstado')
-            ->select("c.idParametroDefecto","tp.nombre as ticketPrioridad", "te.nombre AS ticketEstado", "f.nombre AS funcionario", "tef.nombre AS estadoFinalizar", "tea.nombre AS estadoArchivar", "ter.nombre AS estadoRechazar", "c.diasArchivar")
-            ->get();
+            ->join('Soporte.TicketPrioridad as tp', 'c.idTicketPrioridad', '=', 'tp.idTicketPrioridad')
+            ->join('Soporte.TicketEstado as te', 'c.idTicketEstado', '=', 'te.idTicketEstado')
+            ->join('Soporte.Funcionario as f', 'c.idFuncionario', '=', 'f.idFuncionario')
+            ->join('Soporte.TicketEstado as tef', 'c.idTicketEstadoFinalizar', '=', 'tef.idTicketEstado')
+            ->join('Soporte.TicketEstado as tea', 'c.idTicketEstadoArchivar', '=', 'tea.idTicketEstado')
+            ->join('Soporte.TicketEstado as ter', 'c.idTicketEstadoRechazar', '=', 'ter.idTicketEstado')
+            ->select(
+                "c.idParametroDefecto",
+                "tp.nombre as ticketPrioridad",
+                "te.nombre AS ticketEstado",
+                "f.nombre AS funcionario",
+                "tef.nombre AS ticketEstadoFinalizar",
+                "tea.nombre AS ticketEstadoArchivar",
+                "ter.nombre AS ticketEstadoRechazar",
+                "c.diasArchivar"
+            )->get();
 
         $ticketPrioridad = DB::table('Soporte.TicketPrioridad')->get();
         $ticketEstado = DB::table('Soporte.TicketEstado')->get();
         $funcionario = DB::table('Soporte.Funcionario')->get();
 
-        return $this->views("soporte.parametroDefecto.index",
-                            [ 
-                                "data" =>$datos,
-                                'ticketPrioridad' => $ticketPrioridad,
-                                'ticketEstado' => $ticketEstado,
-                                'funcionario' => $funcionario
-                            ]);
+        return $this->views(
+            "soporte.parametroDefecto.index",
+            [
+                "data" => $datos,
+                'ticketPrioridad' => $ticketPrioridad,
+                'ticketEstado' => $ticketEstado,
+                'funcionario' => $funcionario
+            ]
+        );
     }
 
     /**
@@ -129,12 +151,12 @@ class ParametroDefectoController extends CustomController
         $ticketEstado = DB::table('Soporte.TicketEstado')->get();
         $funcionario = DB::table('Soporte.Funcionario')->get();
 
-        return $this->views("soporte.parametroDefecto.edit",[
-                                        "edit"=>$parametroDefecto,
-                                        'ticketPrioridad' => $ticketPrioridad,
-                                        'ticketEstado' => $ticketEstado,
-                                        'funcionario' => $funcionario
-                                     ]);
+        return $this->views("soporte.parametroDefecto.edit", [
+            "edit" => $parametroDefecto,
+            'ticketPrioridad' => $ticketPrioridad,
+            'ticketEstado' => $ticketEstado,
+            'funcionario' => $funcionario
+        ]);
     }
 
     /**
@@ -146,31 +168,33 @@ class ParametroDefectoController extends CustomController
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),
-                        [
-                            'ticketPrioridad' => 'required',
-                            'ticketEstado' => 'required',
-                            'funcionario' => 'required',
-                            'ticketEstadoFinalizar' => 'required',
-                            'ticketEstadoArchivar' => 'required',
-                            'ticketEstadoRechazar' => 'required',
-                            'diasArchivar' => 'required|max:5|regex:/^[0-9]+$/'
-                        ],
-                        [
-                            'ticketPrioridad.required' => 'La prioridad del ticket es requerida',
-                            'ticketEstado.required' => 'El estado del ticket es requerido',
-                            'funcionario.required' => 'El funcionario es requerido',
-                            'ticketEstadoFinalizar.required' => 'El estado de finalización es requerido',
-                            'ticketEstadoArchivar.required' => 'El estado de archivar es requerido',
-                            'ticketEstadoRechazar.required' => 'El estado de rechazar es requerido',
-                            'diasArchivar.required' => 'Los días a archivar es requerido',
-                            'diasArchivar.max' => 'El máximo permitido son 5 caracteres'
-                        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'ticketPrioridad' => 'required',
+                'ticketEstado' => 'required',
+                'funcionario' => 'required',
+                'ticketEstadoFinalizar' => 'required',
+                'ticketEstadoArchivar' => 'required',
+                'ticketEstadoRechazar' => 'required',
+                'diasArchivar' => 'required|integer|max:5'
+            ],
+            [
+                'ticketPrioridad.required' => 'La prioridad del ticket es requerida',
+                'ticketEstado.required' => 'El estado del ticket es requerido',
+                'funcionario.required' => 'El funcionario es requerido',
+                'ticketEstadoFinalizar.required' => 'El estado de finalización es requerido',
+                'ticketEstadoArchivar.required' => 'El estado de archivar es requerido',
+                'ticketEstadoRechazar.required' => 'El estado de rechazar es requerido',
+                'diasArchivar.required' => 'Los días a archivar es requerido',
+                'diasArchivar.max' => 'El máximo permitido son 5 caracteres'
+            ]
+        );
 
         if ($validator->fails()) {
-            return redirect('/parametroDefecto/'.$id.'/edit')
-                        ->withErrors($validator)
-                        ->withInput();
+            return redirect('/parametroDefecto/' . $id . '/edit')
+                ->withErrors($validator)
+                ->withInput();
         }
 
         try {
@@ -185,9 +209,9 @@ class ParametroDefectoController extends CustomController
             $parametroDefecto->idUsuarioModificacion = Auth::id();
             $parametroDefecto->save();
         } catch (Exception $e) {
-            return $this->error($request,$e);
+            return $this->error($request, $e);
         }
-        
+
         $request->session()->flash('alert-success', 'El parámetro se ha modificado correctamente.');
         return redirect()->route('parametroDefecto.index');
         /**/
@@ -201,7 +225,18 @@ class ParametroDefectoController extends CustomController
      */
     public function destroy($id)
     {
-        ParametroDefecto::destroy($id);
-        return back();
+        try {
+            $parametroDefecto = ParametroDefecto::find($id);
+
+            if (!$parametroDefecto) {
+                return back()->with('alert-danger', 'No se encontro el Parámetro al eliminar.');
+            }
+
+            $parametroDefecto->delete();
+
+            return back()->with('alert-success', "El parámetro  se ha eliminado correctamente.");
+        } catch (Exception $e) {
+            return back()->with('alert-danger', 'Error al eliminar el Parámetro. ' . $e->getMessage());
+        }
     }
 }

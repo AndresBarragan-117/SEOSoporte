@@ -121,7 +121,7 @@
 						<td>{{$dt->nombre}}</td>
 						<td>{{$dt->descripcion}}</td>
 						<td>
-							<form id="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
+							<form class="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
 								<a title="Editar" href="{{ $dt->idPlantillaLista.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
@@ -149,7 +149,7 @@
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
 	
 	// script confirmar si se elimina una plantilla
-	$("#formDelete").submit(function(e){
+	$(".formDelete").submit(function(e){
 		if(!confirm("¿Está seguro de eliminar esta lista de plantilla?")) 
 		{
 			e.preventDefault();	

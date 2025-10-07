@@ -91,7 +91,7 @@
 						<td>{{$dt->nombre}}</td>
 						<td>{{$dt->descripcion}}</td>
 						<td>
-							<form id="formDelete" action="{{ route('plantilla.destroy', $dt->idPlantilla) }}" method="POST">
+							<form class="formDelete" action="{{ route('plantilla.destroy', $dt->idPlantilla) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
 								<a title="Editar" href="{{ $dt->idPlantilla.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
@@ -115,10 +115,10 @@
 	@if(isset($data))
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
 
-	$("#formDelete").submit(function(e)
+	$(".formDelete").submit(function(e)
 	{
 
-		if(!confirm("Está seguro de eliminar este registro?"))
+		if(!confirm("Está seguro de eliminar esta plantilla?"))
 		{
 			e.preventDefault();	
 		}
