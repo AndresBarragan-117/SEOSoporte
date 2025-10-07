@@ -51,10 +51,28 @@ class PlantillaListaController extends CustomController
     {
         
         // validar los datos enviados por el formulario 
-        $validator = Validator::make(
-            $request->all(), 
-            $request->rules(),
-            $request->messages());
+        $validator = Validator::make($request->all(), 
+            [
+                'nombre' => 'required|max:250',
+                'descripcion' => 'required|max:250',
+                'listaPlantilla' => 'required',
+                'numeroOrdenLista' => 'required|numeric',
+                'listaTipoCaptura' => 'required',
+                'opcionTipoCaptura' => 'required',
+            ],
+            [
+                'nombre.required' => 'El nombre es requerido',
+                'nombre.max' => 'El máximo permitido son 250 caracteres',
+                'nombre.regex' => 'Sólo se aceptan letras',
+                'descripcion.required' => 'La descripción es requerido',
+                'descripcion.max' => 'El máximo permitido son 250 caracteres',
+                'descripcion.regex' => 'Sólo se aceptan letras',
+                'listaPlantilla.required' => 'Seleccione la Plantilla',
+                'numeroOrdenLista.required' => 'El número de orden es requerido',
+                'numeroOrdenLista.numeric' => 'El número de orden debe ser numérico',
+                'listaTipoCaptura.required' => 'Seleccione el tipo de captura',
+                'opcionTipoCaptura.required' => 'Seleccione la opción de tipo de captura',
+            ]);
 
         if($validator->validate())
         {
@@ -71,9 +89,6 @@ class PlantillaListaController extends CustomController
                 $plantillaLista->idUsuarioModificacion = Auth::id();
                 $plantillaLista->save();
               
-            // } catch(Exception $e) {
-            //     return $this->error($request,$e);
-            // }
             } catch(Exception $e) {
                 return back()->with('alert-danger', $e->getMessage())->withInput();
             }
@@ -140,9 +155,12 @@ class PlantillaListaController extends CustomController
         
         $validator = Validator::make($request->all(), 
             [
-                'nombre' => 'required|max:250|regex:/^[aA-zZ \-0-9óíúáñé]+$/i',
-                'descripcion' => 'required|max:250|regex:/^[aA-zZ -]+$/i',
+                'nombre' => 'required|max:250',
+                'descripcion' => 'required|max:250',
                 'listaPlantilla' => 'required',
+                'numeroOrdenLista' => 'required|numeric',
+                'listaTipoCaptura' => 'required',
+                'opcionTipoCaptura' => 'required',
             ],
             [
                 'nombre.required' => 'El nombre es requerido',
@@ -152,6 +170,10 @@ class PlantillaListaController extends CustomController
                 'descripcion.max' => 'El máximo permitido son 250 caracteres',
                 'descripcion.regex' => 'Sólo se aceptan letras',
                 'listaPlantilla.required' => 'Seleccione la Plantilla',
+                'numeroOrdenLista.required' => 'El número de orden es requerido',
+                'numeroOrdenLista.numeric' => 'El número de orden debe ser numérico',
+                'listaTipoCaptura.required' => 'Seleccione el tipo de captura',
+                'opcionTipoCaptura.required' => 'Seleccione la opción de tipo de captura',
             ]);
         
         if ($validator->fails()) {

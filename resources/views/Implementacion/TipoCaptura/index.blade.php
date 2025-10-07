@@ -16,8 +16,8 @@
 		{{ csrf_field() }}
 		<!-- Acciones(COnsultar, Guardar, Nuevo) -->
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('tipoCaptura') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
-			<a href="{{ url('tipoCaptura/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
+			<a title="Nuevo Tipo Captura" href="{{ url('tipoCaptura') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Consultar Tipo Captura" href="{{ url('tipoCaptura/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
 			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
 		</div>
 		<!-- Nav tabs -->
@@ -73,8 +73,8 @@
 							<form id="formDelete" action="{{ route('tipoCaptura.destroy', $dt->idTipoCaptura) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
-								<a href="{{ $dt->idTipoCaptura.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-								<button type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
+								<a title="Editar" href="{{ $dt->idTipoCaptura.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
 							</form>
 						</td>
 					</tr>
@@ -96,12 +96,10 @@
 
 	$("#formDelete").submit(function(e)
 	{
-
 		if(!confirm("Está seguro de eliminar este registro?"))
 		{
 			e.preventDefault();	
 		}
-
 	});
 	@endif
 </script>

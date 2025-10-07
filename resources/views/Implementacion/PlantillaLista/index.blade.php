@@ -55,15 +55,11 @@
 								@else
 									<option value="{{$p->idPlantilla}}"> {{ $p->nombre}}</option>
 								@endif
-							@endforeach
-							
-						</select>
-						
+							@endforeach	
+						</select>	
 						<div class="text-danger">{!!$errors->first('listaPlantilla', '<small>:message</small>')!!}</div>
 					</div>
 				</div>
-				
-
 
 				<div class="row">
 					<div class="col-md-8">
@@ -125,7 +121,7 @@
 						<td>{{$dt->nombre}}</td>
 						<td>{{$dt->descripcion}}</td>
 						<td>
-							<form class="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
+							<form id="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
 								<a title="Editar" href="{{ $dt->idPlantillaLista.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
@@ -153,8 +149,9 @@
 	$('#tabForm a[href=\"#consulta\"]').tab('show');
 	
 	// script confirmar si se elimina una plantilla
-	$(".formDelete").submit(function(e){
-		if(!confirm("¿Está seguro de eliminar esta plantilla?")) {
+	$("#formDelete").submit(function(e){
+		if(!confirm("¿Está seguro de eliminar esta lista de plantilla?")) 
+		{
 			e.preventDefault();	
 		}
 	});

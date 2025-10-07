@@ -45,7 +45,21 @@ class PlantillaController extends CustomController
     public function store(PlantillaValidator $request)
     {
         $validator = Validator::make(
-            $request->all(), 
+            $request->all(),
+            [
+                'nombre' => 'required|max:250',
+                'descripcion' => 'required|max:250',
+                'listadoTipoPlantilla' => 'required',
+                'estado' => 'required',
+            ],
+            [
+                'nombre.required' => 'El nombre es requerido',
+                'nombre.max' => 'El máximo permitido son 250 caracteres',
+                'descripcion.required' => 'La descripción es requerido',
+                'descripcion.max' => 'El máximo permitido son 250 caracteres',
+                'listadoTipoPlantilla.required' => 'Seleccione el tipo de plantilla',
+                'estado.required' => 'Seleccione el estado',
+            ], 
             $request->rules(),
             $request->messages());
 
@@ -116,18 +130,21 @@ class PlantillaController extends CustomController
     // funcion para actualizar un registro existente de plantilla
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), 
+        $validator = Validator::make(
+            $request->all(),
             [
-                'nombre' => 'required|max:250|regex:/^[aA-zZ \-0-9óíúáñé]+$/i',
-                'descripcion' => 'required|max:250|regex:/^[aA-zZ \-0-9óíúáñé \.]+$/i',
+                'nombre' => 'required|max:250',
+                'descripcion' => 'required|max:250',
+                'listadoTipoPlantilla' => 'required',
+                'estado' => 'required',
             ],
             [
                 'nombre.required' => 'El nombre es requerido',
                 'nombre.max' => 'El máximo permitido son 250 caracteres',
-                'nombre.regex' => 'Sólo se aceptan letras',
                 'descripcion.required' => 'La descripción es requerido',
                 'descripcion.max' => 'El máximo permitido son 250 caracteres',
-                'descripcion.regex' => 'Sólo se aceptan letras',
+                'listadoTipoPlantilla.required' => 'Seleccione el tipo de plantilla',
+                'estado.required' => 'Seleccione el estado',
             ]);
         
         if ($validator->fails()) {

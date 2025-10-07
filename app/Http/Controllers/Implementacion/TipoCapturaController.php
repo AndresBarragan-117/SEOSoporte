@@ -39,7 +39,21 @@ class TipoCapturaController extends CustomController
     public function store(TipoCapturaValidator $request)
     {
         $validator = Validator::make(
-            $request->all(), 
+            $request->all(),
+            [
+                'nombre' => 'required|max:250',
+                'descripcion' => 'required|max:250',
+                'estado' => 'required',
+            ],
+            [
+                'nombre.required' => 'El nombre es requerido',
+                'nombre.max' => 'El máximo permitido son 250 caracteres',
+                'nombre.regex' => 'Sólo se aceptan letras',
+                'descripcion.required' => 'La descripción es requerido',
+                'descripcion.max' => 'El máximo permitido son 250 caracteres',
+                'descripcion.regex' => 'Sólo se aceptan letras',
+                'estado.required' => 'El estado es requerido',
+            ], 
             $request->rules(),
             $request->messages());
 
@@ -100,12 +114,15 @@ class TipoCapturaController extends CustomController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // funcion para actualizar un registro existente de tipo de captura
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), 
+        $validator = Validator::make(
+            $request->all(),
             [
-                'nombre' => 'required|max:250|regex:/^[aA-zZ \-0-9óíúáñé]+$/i',
-                'descripcion' => 'required|max:250|regex:/^[aA-zZ \-0-9óíúáñé \.]+$/i',
+                'nombre' => 'required|max:250',
+                'descripcion' => 'required|max:250',
+                'estado' => 'required',
             ],
             [
                 'nombre.required' => 'El nombre es requerido',
@@ -114,6 +131,7 @@ class TipoCapturaController extends CustomController
                 'descripcion.required' => 'La descripción es requerido',
                 'descripcion.max' => 'El máximo permitido son 250 caracteres',
                 'descripcion.regex' => 'Sólo se aceptan letras',
+                'estado.required' => 'El estado es requerido',
             ]);
         
         if ($validator->fails()) {
@@ -132,9 +150,9 @@ class TipoCapturaController extends CustomController
         } catch (Exception $e) {
             return $this->error($request,$e);
         }
+
         $request->session()->flash('alert-success', 'El Tipo Captura se ha modificado correctamente.');
         return redirect()->route('tipoCaptura.index');
-        /**/
     }
 
     /**
@@ -145,7 +163,19 @@ class TipoCapturaController extends CustomController
      */
     public function destroy($id)
     {
-        TipoCaptura::destroy($id);
-        return back();
+        try {
+            $tipoCaptura = TipoCaptura::find($id);
+
+            if (!$tipoCaptura) {
+                return back()->with('alert-danger', 'No se encontro el Tipo Captura al eliminar.');
+            }
+
+            $nombre = $tipoCaptura->nombre;
+            $tipoCaptura->delete();
+
+            return back()->with('alert-success', "El Tipo Captura '$nombre' se ha eliminado correctamente.");
+        } catch (Exception $e) {
+            return back()->with('alert-danger', 'Error al eliminar el Tipo Captura. ' . $e->getMessage());
+        }
     }
 }

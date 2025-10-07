@@ -40,10 +40,17 @@ Route::resource('/rol', 'Seguridad\RolController'); //->name('index', 'usuario')
 Route::resource('/categoria', 'Soporte\CategoriaController');
 Route::resource('/kbArticuloCategoria', 'Soporte\KBArticuloCategoriaController');
 
-Route::resource('/kbArticulo', 'Soporte\KBArticuloController');
 Route::post('/kbArticulo/calificarArticulo', 'Soporte\KBArticuloController@calificarArticulo');
 Route::get('/kbArticulo/listadoBaseConocimiento/{busqueda?}/{json?}', 'Soporte\KBArticuloController@listadoBaseConocimiento');
+Route::resource('/kbArticulo', 'Soporte\KBArticuloController');
 Route::get('/kbArticulo/consultarContenidoArticulo/{idKbArticulo}', 'Soporte\KBArticuloController@consultarContenidoArticulo');
+
+Route::resource('/implementacionEmpresa', 'Implementacion\ImplementacionEmpresaController');
+Route::post('/implementacionEmpresa/guardar', 'Implementacion\ImplementacionEmpresaController@guardar');
+
+Route::get('/plantilla/obtenerPlantilla/{idTipoPlantilla}', 'Implementacion\PlantillaController@obtenerPlantilla');
+Route::resource('/plantilla', 'Implementacion\PlantillaController');
+Route::resource('/tipoCaptura', 'Implementacion\TipoCapturaController');
 
 Route::get('/mensajePlantilla/consultarMensajePlantilla', 'Soporte\MensajePlantillaController@consultarMensajePlantilla');
 Route::resource('/mensajePlantilla', 'Soporte\MensajePlantillaController');
@@ -86,13 +93,9 @@ Route::post('/ticketSoporte/notificacionTicket', 'Soporte\TicketSoporteControlle
 Route::post('/ticketSoporte/consultarAnexoTicket', 'Soporte\TicketSoporteController@consultarAnexoTicket');
 Route::get('/ticketSoporte/ticketEstadoTarea', 'Soporte\TicketSoporteController@ticketEstadoTarea');
 
-Route::get('/plantilla/obtenerPlantilla/{idTipoPlantilla}', 'Implementacion\PlantillaController@obtenerPlantilla');
-Route::resource('/plantilla', 'Implementacion\PlantillaController');
-Route::resource('/tipoCaptura', 'Implementacion\TipoCapturaController');
 Route::get('/plantillaLista/cargarPlantillaLista/{idEmpresa}/{idPlantilla}', 'Implementacion\PlantillaListaController@cargarPlantillaLista');
 Route::resource('/plantillaLista', 'Implementacion\PlantillaListaController');
-Route::post('/implementacionEmpresa/guardar', 'Implementacion\ImplementacionEmpresaController@guardar');
-Route::resource('/implementacionEmpresa', 'Implementacion\ImplementacionEmpresaController');
+
 
 // Registration Routes...
 //$this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
