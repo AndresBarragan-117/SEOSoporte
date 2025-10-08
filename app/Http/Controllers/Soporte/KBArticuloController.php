@@ -188,47 +188,133 @@ class KBArticuloController extends CustomController
         }
     }
 
+    // public function listadoBaseConocimiento($busqueda = '', $json = 0)
+    // {
+    //     if($json == 1) {
+    //         $roles = \Illuminate\Support\Facades\Session::get('roles', '');
+    //         $tipoArticulo = '';
+
+    //         foreach ($roles[0] as $rol) { 
+    //             if($rol->nombre == "Administradores" ||  strtoupper($rol->nombre) == "SOPORTE") {
+    //                 $tipoArticulo = '1,2';
+    //                 break;
+    //             }
+    //             if(strtoupper($rol->nombre) == "CLIENTE") {
+    //                 $tipoArticulo = '1';
+    //             }
+    //         }
+
+    //         $listArticulo = DB::select("select
+    //                                 a.*,
+    //                                 c.\"nombreEtiqueta\" as categoria,
+    //                                 cp.\"nombreEtiqueta\" as \"categoriaPadre\",
+    //                                 (case when (select count(*) from \"Soporte\".\"Votacion\" as v where v.\"idKBArticulo\" = a.\"idKBArticulo\" and v.\"idUsuario\" = :id) > 0 then 1 else 0 end) as calificado,
+    //                                 COALESCE((select v.\"cantidadVotos\" from \"Soporte\".\"Votacion\" as v where v.\"idKBArticulo\" = a.\"idKBArticulo\" and v.\"idUsuario\" = :id), 0) as calificacion
+    //                             from \"Soporte\".\"KBArticulo\" a
+    //                             inner join \"Soporte\".\"KBArticuloCategoria\" c on a.\"idKBArticuloCategoria\" = c.\"idKBArticuloCategoria\"
+    //                             left join \"Soporte\".\"KBArticuloCategoria\" cp on c.\"padreId\" = cp.\"idKBArticuloCategoria\"
+    //                             WHERE a.tipo IN(".$tipoArticulo.") AND (:busqueda = 'empty' OR UPPER(c.\"nombreEtiqueta\") LIKE :busqueda OR UPPER(a.asunto) LIKE :busqueda) OR UPPER(a.contenido) LIKE :busqueda"
+    //                             , ["busqueda"=>($busqueda != "empty" ? '%'.strtoupper($busqueda).'%' : $busqueda), "id"=> Auth::id()]);
+    //         $array = array();
+    //         foreach($listArticulo as $d)
+    //         {
+    //             $array["$d->categoria"][] = ["idKbArticulo"=>$d->idKBArticulo ,"asunto"=>$d->asunto, "padre"=>$d->categoriaPadre, "calificado"=>$d->calificado, "calificacion"=>$d->calificacion, "cliente"=>($tipoArticulo == '1' ? 1 : 0)];
+    //         }
+            
+    //         $listPadre = DB::select("select distinct
+    //                                 cp.\"nombreEtiqueta\" as carpeta
+    //                                 from \"Soporte\".\"KBArticulo\" a
+    //                                 inner join \"Soporte\".\"KBArticuloCategoria\" c on a.\"idKBArticuloCategoria\" = c.\"idKBArticuloCategoria\"
+    //                                 inner join \"Soporte\".\"KBArticuloCategoria\" cp on c.\"padreId\" = cp.\"idKBArticuloCategoria\" ", []);
+    //         return response()->json(["carpetas"=> $listPadre, "baseConocimiento"=>$array]);
+    //     } else {
+    //         return $this->views("soporte.consultas.listadoBaseConocimiento", [
+    //                 "listArticulo" => null
+    //         ]);
+    //     }
+    // }
+
     public function listadoBaseConocimiento($busqueda = '', $json = 0)
     {
-        if($json == 1) {
+        if ($json == 1) {
             $roles = \Illuminate\Support\Facades\Session::get('roles', '');
             $tipoArticulo = '';
+
             foreach ($roles[0] as $rol) { 
-                if($rol->nombre == "Administradores" ||  strtoupper($rol->nombre) == "SOPORTE") {
+                if ($rol->nombre == "Administradores" || strtoupper($rol->nombre) == "SOPORTE") {
                     $tipoArticulo = '1,2';
                     break;
                 }
-                if(strtoupper($rol->nombre) == "CLIENTE") {
+                if (strtoupper($rol->nombre) == "CLIENTE") {
                     $tipoArticulo = '1';
                 }
             }
 
-            $listArticulo = DB::select("select
-                                    a.*,
-                                    c.\"nombreEtiqueta\" as categoria,
-                                    cp.\"nombreEtiqueta\" as \"categoriaPadre\",
-                                    (case when (select count(*) from \"Soporte\".\"Votacion\" as v where v.\"idKBArticulo\" = a.\"idKBArticulo\" and v.\"idUsuario\" = :id) > 0 then 1 else 0 end) as calificado,
-                                    COALESCE((select v.\"cantidadVotos\" from \"Soporte\".\"Votacion\" as v where v.\"idKBArticulo\" = a.\"idKBArticulo\" and v.\"idUsuario\" = :id), 0) as calificacion
-                                from \"Soporte\".\"KBArticulo\" a
-                                inner join \"Soporte\".\"KBArticuloCategoria\" c on a.\"idKBArticuloCategoria\" = c.\"idKBArticuloCategoria\"
-                                left join \"Soporte\".\"KBArticuloCategoria\" cp on c.\"padreId\" = cp.\"idKBArticuloCategoria\"
-                                WHERE a.tipo IN(".$tipoArticulo.") AND (:busqueda = 'empty' OR UPPER(c.\"nombreEtiqueta\") LIKE :busqueda OR UPPER(a.asunto) LIKE :busqueda) OR UPPER(a.contenido) LIKE :busqueda"
-                                , ["busqueda"=>($busqueda != "empty" ? '%'.strtoupper($busqueda).'%' : $busqueda), "id"=> Auth::id()]);
-            $array = array();
-            foreach($listArticulo as $d)
-            {
-                $array["$d->categoria"][] = ["idKbArticulo"=>$d->idKBArticulo ,"asunto"=>$d->asunto, "padre"=>$d->categoriaPadre, "calificado"=>$d->calificado, "calificacion"=>$d->calificacion, "cliente"=>($tipoArticulo == '1' ? 1 : 0)];
+            $listArticulo = DB::select("
+                SELECT
+                    a.*,
+                    c.\"nombreEtiqueta\" AS categoria,
+                    cp.\"nombreEtiqueta\" AS \"categoriaPadre\",
+                    CASE 
+                        WHEN (SELECT COUNT(*) 
+                            FROM \"Soporte\".\"Votacion\" AS v 
+                            WHERE v.\"idKBArticulo\" = a.\"idKBArticulo\" 
+                            AND v.\"idUsuario\" = :id) > 0 
+                        THEN 1 ELSE 0 
+                    END AS calificado,
+                    COALESCE((
+                        SELECT v.\"cantidadVotos\" 
+                        FROM \"Soporte\".\"Votacion\" AS v 
+                        WHERE v.\"idKBArticulo\" = a.\"idKBArticulo\" 
+                        AND v.\"idUsuario\" = :id
+                    ), 0) AS calificacion
+                FROM \"Soporte\".\"KBArticulo\" a
+                INNER JOIN \"Soporte\".\"KBArticuloCategoria\" c 
+                    ON a.\"idKBArticuloCategoria\" = c.\"idKBArticuloCategoria\"
+                LEFT JOIN \"Soporte\".\"KBArticuloCategoria\" cp 
+                    ON c.\"padreId\" = cp.\"idKBArticuloCategoria\"
+                WHERE a.tipo IN ($tipoArticulo)
+                AND (
+                        :busqueda = 'empty' 
+                        OR UPPER(c.\"nombreEtiqueta\") LIKE :busqueda
+                        OR UPPER(a.asunto) LIKE :busqueda
+                        OR UPPER(a.contenido) LIKE :busqueda
+                    )
+            ", [
+                "busqueda" => ($busqueda != "empty" ? '%' . strtoupper($busqueda) . '%' : $busqueda),
+                "id" => Auth::id()
+            ]);
+
+            $array = [];
+            foreach ($listArticulo as $d) {
+                $array["$d->categoria"][] = [
+                    "idKbArticulo" => $d->idKBArticulo,
+                    "asunto" => $d->asunto,
+                    "padre" => $d->categoriaPadre,
+                    "calificado" => $d->calificado,
+                    "calificacion" => $d->calificacion,
+                    "cliente" => ($tipoArticulo == '1' ? 1 : 0)
+                ];
             }
-            
-            $listPadre = DB::select("select distinct
-                                    cp.\"nombreEtiqueta\" as carpeta
-                                    from \"Soporte\".\"KBArticulo\" a
-                                    inner join \"Soporte\".\"KBArticuloCategoria\" c on a.\"idKBArticuloCategoria\" = c.\"idKBArticuloCategoria\"
-                                    inner join \"Soporte\".\"KBArticuloCategoria\" cp on c.\"padreId\" = cp.\"idKBArticuloCategoria\" ", []);
-            return response()->json(["carpetas"=> $listPadre, "baseConocimiento"=>$array]);
+
+            $listPadre = DB::select("
+                SELECT DISTINCT
+                    COALESCE(cp.\"nombreEtiqueta\", c.\"nombreEtiqueta\") AS carpeta
+                FROM \"Soporte\".\"KBArticulo\" a
+                INNER JOIN \"Soporte\".\"KBArticuloCategoria\" c 
+                    ON a.\"idKBArticuloCategoria\" = c.\"idKBArticuloCategoria\"
+                LEFT JOIN \"Soporte\".\"KBArticuloCategoria\" cp 
+                    ON c.\"padreId\" = cp.\"idKBArticuloCategoria\"
+            ");
+
+            return response()->json([
+                "carpetas" => $listPadre,
+                "baseConocimiento" => $array
+            ]);
+
         } else {
             return $this->views("soporte.consultas.listadoBaseConocimiento", [
-                    "listArticulo" => null
+                "listArticulo" => null
             ]);
         }
     }
