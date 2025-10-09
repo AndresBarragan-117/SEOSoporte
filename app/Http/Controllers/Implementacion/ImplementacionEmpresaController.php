@@ -35,7 +35,7 @@ class ImplementacionEmpresaController extends CustomController
         $resultado = DB::select("select empresa.\"idEmpresa\", \"razonSocial\"  from dblink('$con2',
                                     'SELECT \"razonSocial\", \"idEmpresa\", implementado FROM \"Empresa\".\"Empresa\"')
                                     AS empresa(\"razonSocial\" text, \"idEmpresa\" integer, implementado boolean)
-                                    WHERE implementado = FALSE");
+                                    WHERE implementado = FALSE ORDER BY \"razonSocial\";");
         
         $resultado2 = DB::select("Select \"idTipoPlantilla\",nombre from \"Implementacion\".\"TipoPlantilla\"");
         return $this->views("implementacion.implementacionEmpresa.index", [
