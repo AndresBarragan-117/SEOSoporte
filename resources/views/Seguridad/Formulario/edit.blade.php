@@ -18,10 +18,8 @@
 		{{ csrf_field() }}
 		<input name="_method" type="hidden" value="PUT">
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			
-			<a href="{{ url('formulario') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Nuevo Formulario" href="{{ url('formulario') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
 			<button type="submit" class="btn btn-info" title="Modificar"><span class="fa fa-edit" ></span></button>
-		
 		</div>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" id="tabForm">

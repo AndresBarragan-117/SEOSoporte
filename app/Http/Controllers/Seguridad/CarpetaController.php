@@ -81,7 +81,6 @@ class CarpetaController extends CustomController
             ->get();
         //Carpeta::leftJoin('Seguridad.Carpeta as c', '')
 
-
         return $this->views("seguridad.carpeta.index",
                             [
                                 "carpeta"=>$this->cargarCarpeta(), 
@@ -134,8 +133,12 @@ class CarpetaController extends CustomController
 
         try {
             $carpeta = Carpeta::find($id);
+            
+            if (!$carpeta) {
+                return back()->with('alert-danger', 'No se encontró la carpeta a modificar.');
+            }
+            
             $carpeta->descripcion = $request->descripcion;
-            //$carpeta->idUsuarioCreacion = Auth::id();
             $carpeta->idUsuarioModificacion = Auth::id();
             $carpeta->idPadre = $request->carpetaPadre != ""?$request->carpetaPadre:null;
             $carpeta->save();
@@ -155,13 +158,24 @@ class CarpetaController extends CustomController
      */
     public function destroy($id)
     {
-        Carpeta::destroy($id);
-        return back();
+        try {
+            $carpeta = Carpeta::find($id);
+
+            if (!$carpeta) {
+                return back()->with('alert-danger', 'No se encontró la carpeta al eliminar.');
+            }
+
+            $nombre = $carpeta->descripcion;
+            $carpeta->delete();
+
+            return back()->with('alert-success', "La carpeta '$nombre' se ha eliminado correctamente.");
+        } catch (Exception $e) {
+            return back()->with('alert-danger', 'Error al eliminar la carpeta. ' . $e->getMessage());
+        }
     }
 
     private function cargarCarpeta()
     {
         return Carpeta::all();
-
     }
 }

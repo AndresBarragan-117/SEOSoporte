@@ -17,7 +17,7 @@
 		{{ csrf_field() }}
 		
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a title="Nuevo Articulo" href="{{ url('kbArticulo') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
+			<a title="Nuevo Articulo" href="{{ url('kbArticulo') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
 			<a href="{{ url('kbArticulo/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
 			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
 		</div>

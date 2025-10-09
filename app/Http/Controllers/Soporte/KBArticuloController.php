@@ -241,11 +241,11 @@ class KBArticuloController extends CustomController
             $tipoArticulo = '';
 
             foreach ($roles[0] as $rol) { 
-                if ($rol->nombre == "Administradores" || strtoupper($rol->nombre) == "SOPORTE") {
+                if ($rol->nombre == "Administradores" || strtoupper($rol->nombre) == "Soporte") {
                     $tipoArticulo = '1,2';
                     break;
                 }
-                if (strtoupper($rol->nombre) == "CLIENTE") {
+                if (strtoupper($rol->nombre) == "Cliente") {
                     $tipoArticulo = '1';
                 }
             }

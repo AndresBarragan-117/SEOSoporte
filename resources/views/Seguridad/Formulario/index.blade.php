@@ -17,8 +17,8 @@
 	<form action="{{ url('formulario')}}" role="form" class="form-horizontal" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}
 		<div style="margin-left:6px;margin-bottom: 12px;">
-			<a href="{{ url('formulario') }}" class="btn btn-info"><span class="fa fa-file" title="Limpiar"></span></a>
-			<a href="{{ url('formulario/show') }}" class="btn btn-info" title="Consultar"><span class=" fa fa-search" ></span></a>
+			<a title="Nuevo Formulario" href="{{ url('formulario') }}" class="btn btn-info"><span class="fa fa-file"></span></a>
+			<a title="Consultar" href="{{ url('formulario/show') }}" class="btn btn-info"><span class=" fa fa-search" ></span></a>
 			<button type="submit" class="btn btn-info" title="Guardar"><span class="fa fa-save"></span></button>
 		</div>
 		<!-- Nav tabs -->
@@ -112,8 +112,8 @@
 							<form class="formDelete" action="{{ route('formulario.destroy', $dt->idFormulario) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">
 								{{ csrf_field() }}
-								<a href="{{ $dt->idFormulario.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-								<button type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
+								<a title="Editar" href="{{ $dt->idFormulario.'/edit'}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
+								<button title="Eliminar" type="submit" class="btn btn-danger btn-xs"><span class="fa fa-window-close"></span></button>
 							</form>
 							
 						</td>
