@@ -112,6 +112,7 @@
 					<tr>
 						<th>Nombre</th>
 						<th>Descripción</th>
+						<th>Plantilla</th>
 						<th>Acción</th>
 					</tr>
 				</thead>
@@ -120,6 +121,7 @@
 					<tr>
 						<td>{{$dt->nombre}}</td>
 						<td>{{$dt->descripcion}}</td>
+						<td>{{$dt->dPlantilla}}</td>
 						<td>
 							<form class="formDelete" action="{{ route('plantillaLista.destroy', $dt->idPlantillaLista) }}" method="POST">
 								<input type="hidden" value="DELETE" name="_method">

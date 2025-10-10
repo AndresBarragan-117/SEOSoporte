@@ -113,7 +113,7 @@ class PlantillaListaController extends CustomController
             ->leftJoin("Implementacion.Plantilla as p", "pl.idPlantilla",'=', "p.idPlantilla")
             ->leftJoin("Implementacion.TipoCaptura as tc", "pl.idTipoCaptura",'=', "tc.idTipoCaptura")
             ->select("pl.idPlantillaLista","pl.nombre","pl.descripcion", "pl.idPlantilla", "pl.numeroOrdenLista", "pl.idTipoCaptura", "pl.opcionTipoCaptura", "pl.estado", "p.nombre as dPlantilla", "tc.nombre as dTipoCaptura")
-            ->orderBy('pl.idPlantillaLista', 'asc')->get();
+            ->orderBy('pl.nombre', 'asc')->get();
             
         return $this->views("Implementacion.PlantillaLista.index",
                             [
