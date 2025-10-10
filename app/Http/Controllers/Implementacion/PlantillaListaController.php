@@ -227,17 +227,26 @@ class PlantillaListaController extends CustomController
     // funcion para cargar una lista de plantilla
     public function cargarPlantillaLista($idEmpresa, $idPlantilla) 
     {
-        
         $resultado = DB::select('SELECT
-                                        COALESCE(ie.valor, null) as valor, COALESCE(TO_CHAR(ie."fechaRealiza":: DATE, \'dd/mm/yyyy\'), null) as "fechaRealiza", COALESCE(ie.observacion, null) as observacion,tc.nombre as "codigoTipoCaptura",
+                                        COALESCE(ie.valor, null) as valor, 
+                                        COALESCE(TO_CHAR(ie."fechaRealiza":: DATE, \'dd/mm/yyyy\'), null) as "fechaRealiza", 
+                                        COALESCE(ie.observacion, null) as observacion,
+                                        tc.nombre as "codigoTipoCaptura",
                                         pl.*
                                     FROM "Implementacion"."Plantilla" p
-                                    INNER JOIN "Implementacion"."PlantillaLista" pl ON p."idPlantilla" = pl."idPlantilla"
-                                    INNER JOIN "Implementacion"."TipoCaptura" tc ON pl."idTipoCaptura" = tc."idTipoCaptura"
-                                    LEFT JOIN "Implementacion"."ImplementacionEmpresa" ie ON pl."idPlantillaLista" = ie."idPlantillaLista" 
-                                                                                            AND ie."idEmpresa" = ? AND ie."idPlantilla" = p."idPlantilla"
-                                    WHERE p.estado = TRUE AND pl."idPlantilla" = ?
-                                    ORDER BY CAST(pl."numeroOrdenLista" as INTEGER)', [$idEmpresa, $idPlantilla]);
+                                    INNER JOIN "Implementacion"."PlantillaLista" pl 
+                                        ON p."idPlantilla" = pl."idPlantilla"
+                                    INNER JOIN "Implementacion"."TipoCaptura" tc 
+                                        ON pl."idTipoCaptura" = tc."idTipoCaptura"
+                                    LEFT JOIN "Implementacion"."ImplementacionEmpresa" ie 
+                                        ON pl."idPlantillaLista" = ie."idPlantillaLista" 
+                                        AND ie."idEmpresa" = ? 
+                                        AND ie."idPlantilla" = p."idPlantilla"
+                                    WHERE p.estado = TRUE 
+                                    AND pl."idPlantilla" = ?
+                                    ORDER BY string_to_array(pl."nombre", \'.\')::int[] ASC',
+                                    [$idEmpresa, $idPlantilla]);
+
         return response()->json(["plantillaLista" => $resultado]);
     }
 }

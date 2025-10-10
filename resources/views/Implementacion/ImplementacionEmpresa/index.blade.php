@@ -115,7 +115,9 @@
 				html += '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">Descripción</th><th scope="col">Si/No</th><th scope="col">Fecha</th><th scope="col">Observación</th></thead><tbody>';
 				$.each(response.plantillaLista,function(index, result) {
 					html += '<tr id="' + result.idPlantillaLista + '">';
-					html += '<td>'+result.numeroOrdenLista+'</td>';
+					// html += '<td>'+result.numeroOrdenLista+'</td>';
+					html += '<td>'+result.nombre+'</td>';
+					
 					if(result.codigoTipoCaptura == "Texto") {
 						html += '<td colspan="4">'+result.descripcion+'</td>';
 					} else {
