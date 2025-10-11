@@ -47,7 +47,7 @@
 
 				<div class="row">
 					<div class="col-md-8">
-						<label for="asunto">Asunto</label>
+						<label for="asunto">Solicitud</label>
 						<input name="asunto" id="asunto" class="form-control" value="{{old('asunto')}}"></input>
 						<div class="text-danger">{!!$errors->first('asunto', '<small>:message</small>')!!}</div>
 					</div>

@@ -14,14 +14,48 @@ class CustomController extends Controller
         $this->middleware('auth');
     }
 
-	public function views($ruta,$data = [])
+	public function views($ruta, $data = [])
 	{
 		$data["menu"] = null;
-		if(\Illuminate\Support\Facades\Session::get("formulario") != null)
-		{
+
+		if(\Illuminate\Support\Facades\Session::get("formulario") != null) {
 			$data["menu"] = \Illuminate\Support\Facades\Session::get("formulario");
+
+			// Aquí aplicamos el orden
+			$data["menu"] = collect($data["menu"])
+				->sortBy(function($item, $key) {
+					$customOrder = [
+						'Parámetros' => 1,
+						'Seguridad' => 2,
+						'Base Conocimiento' => 3,
+						'Implementación' => 4,
+						'Soporte' => 5,
+						'Reportes' => 6,
+					];
+					return $customOrder[$key] ?? 999;
+				})
+				->toArray();
+
+			 // 🔹 Ordenar formularios dentro de Parámetros
+            if (isset($data["menu"]["Parámetros"])) {
+                $customOrderParametros = [
+                    'Tipo Captura' => 1,
+                    'Plantilla' => 2,
+                    'Lista Plantilla' => 3,
+                    'KBArticuloCategoria' => 4,
+                    'Ticket Email Plantilla' => 5,
+                    'Parámetro Por Defecto' => 6,
+                ];
+
+                $data["menu"]["Parámetros"] = collect($data["menu"]["Parámetros"])
+                    ->sortBy(function($item) use ($customOrderParametros) {
+                        return $customOrderParametros[$item["formulario"]] ?? 999;
+                    })
+                    ->values() // reindexar el array
+                    ->toArray();
+            }
 		}
-		//dd($data["menu"]);
+
 		return view($ruta, $data);
 	}
 
