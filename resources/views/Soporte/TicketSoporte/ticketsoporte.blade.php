@@ -22,7 +22,7 @@
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" id="tabForm">
 			<li class="nav-item"><a class="nav-link active" role="tab" href="#form" aria-controls="home" role="tab" data-toggle="tab"> Datos Principales</a></li>
-			<li class="nav-item"><a class="nav-link" role="tab" href="#anexos" aria-controls="anexos" role="tab" data-toggle="tab"> Anexos</a></li>
+			<li class="nav-item"><a class="nav-link" role="tab" href="#anexos" aria-controls="anexos" role="tab" data-toggle="tab"> Adjuntar Imagenes</a></li>
 		</ul>
 
         <div class="tab-content">
@@ -54,7 +54,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-10">
-                        <label for="asunto"><b>Problema</b></label>
+                        <label for="asunto"><b>Solicitud</b></label>
                         <textarea rows="10" name="asunto" maxlength="500" id="asunto" class="form-control ckeditor">{{old('asunto')}}</textarea>
                         <div class="text-danger">{!!$errors->first('asunto', '<small>:message</small>')!!}</div>
                     </div>
@@ -80,6 +80,9 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="anexos">
+                <br>
+                <h3>Es Obligatorio Adjuntar las Imagenes en Pantalla Completa</h3>
+                <br>
                 @include('controles.cargarArchivo',["label"=> "Anexo 1", "name"=> "anexo1"])
                 @include('controles.cargarArchivo',["label"=> "Anexo 2", "name"=> "anexo2"])
                 @include('controles.cargarArchivo',["label"=> "Anexo 3", "name"=> "anexo3"])
